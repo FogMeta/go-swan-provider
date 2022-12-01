@@ -1,7 +1,7 @@
 #!/usr/bin/expect
 
 if {$argc < 9} {
-  puts "Usage: custodial.sh <pubKey> <outputAddr> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore> <passwd>"
+  puts "Usage: non-custodial.sh <pubKey> <outputAddr> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore> <passwd>"
   exit 1
 }
 
