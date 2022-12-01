@@ -191,6 +191,24 @@ type ThresholdParams struct {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+type ValidatorResponse struct {
+	Status  string        `json:"status"`
+	Code    string        `json:"code"`
+	Message string        `json:"message,omitempty"`
+	Data    ValidatorData `json:"data"`
+}
+
+type ValidatorData struct {
+	Result string `json:"result"`
+}
+
+type ValidatorParams struct {
+	Address string `json:"address"`
+	Passwd  string `json:"passwd"`
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
 type CustodialResponse struct {
 	Status  string        `json:"status"`
 	Code    string        `json:"code"`
@@ -210,6 +228,7 @@ type CustodialParams struct {
 	NetworkID     string `json:"network_id"`
 	Fee           string `json:"fee"`
 	IsBefore      string `json:"is_before"`
+	Passwd        string `json:"passwd"`
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -234,6 +253,7 @@ type NonCustodialParams struct {
 	NetworkID     string `json:"network_id"`
 	Fee           string `json:"fee"`
 	IsBefore      string `json:"is_before"`
+	Passwd        string `json:"passwd"`
 }
 
 ///////////////////////////////////////////////////////////////////////////////

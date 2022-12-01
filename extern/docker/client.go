@@ -422,8 +422,19 @@ func (cli *DockerCli) PoktCtnExecNode(address string) (*models.NodeData, error) 
 	return jOut, nil
 }
 
-func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore})
+func (cli *DockerCli) PoktCtnExecSetValidator(address, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/set-validator.sh", address, passwd})
+	if err != nil {
+		logs.GetLog().Error("Exec Pocket Set Validator Error:", err)
+		return "", err
+	}
+	logs.GetLog().Debug("Exec Pocket Set Validator Result:", rsp)
+
+	return rsp, nil
+}
+
+func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Custodial Error:", err)
 		return "", err
@@ -433,8 +444,8 @@ func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, servi
 	return rsp, nil
 }
 
-func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore})
+func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket NonCustodial Error:", err)
 		return "", err

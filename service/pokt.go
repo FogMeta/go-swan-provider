@@ -346,7 +346,35 @@ func HttpGetPoktThreshold(c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-func HttpGetPoktCustodial(c *gin.Context) {
+func HttpSetPoktValidator(c *gin.Context) {
+	var params models.ValidatorParams
+	err := c.BindJSON(&params)
+	if err != nil {
+		logs.GetLog().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse("-1", err.Error()))
+		return
+	}
+
+	poktSvr := GetMyPoktService()
+	result, err := poktSvr.GetCli().PoktCtnExecSetValidator(
+		params.Address,
+		params.Passwd,
+	)
+	if err != nil {
+		logs.GetLog().Error(err)
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
+		return
+	}
+
+	data := &models.ValidatorData{
+		Result: result,
+	}
+	c.JSON(http.StatusOK, common.CreateSuccessResponse(data))
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+func HttpSetPoktCustodial(c *gin.Context) {
 	var params models.CustodialParams
 	err := c.BindJSON(&params)
 	if err != nil {
@@ -364,6 +392,7 @@ func HttpGetPoktCustodial(c *gin.Context) {
 		params.NetworkID,
 		params.Fee,
 		params.IsBefore,
+		params.Passwd,
 	)
 	if err != nil {
 		logs.GetLog().Error(err)
@@ -379,7 +408,7 @@ func HttpGetPoktCustodial(c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-func HttpGetPoktNonCustodial(c *gin.Context) {
+func HttpSetPoktNonCustodial(c *gin.Context) {
 	var params models.NonCustodialParams
 	err := c.BindJSON(&params)
 	if err != nil {
@@ -398,6 +427,7 @@ func HttpGetPoktNonCustodial(c *gin.Context) {
 		params.NetworkID,
 		params.Fee,
 		params.IsBefore,
+		params.Passwd,
 	)
 	if err != nil {
 		logs.GetLog().Error(err)

@@ -199,8 +199,9 @@ func poktHttpServer() {
 
 		apiv1.POST("/balance", HttpGetPoktBalance)
 		apiv1.POST("/threshold", HttpGetPoktThreshold)
-		apiv1.POST("/custodial", HttpGetPoktCustodial)
-		apiv1.POST("/noncustodial", HttpGetPoktNonCustodial)
+		apiv1.POST("/set-validator", HttpSetPoktValidator)
+		apiv1.POST("/custodial", HttpSetPoktCustodial)
+		apiv1.POST("/noncustodial", HttpSetPoktNonCustodial)
 	}
 
 	port := config.GetPoktConfig().Pokt.PoktServerApiPort
