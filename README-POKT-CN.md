@@ -1,6 +1,6 @@
 
 
-# Build swan-provider
+# 编译 swan-provider
 
 ``` shell
 #Build Instructions
@@ -11,18 +11,17 @@ go build -o ./swan-provider main.go
 
 ```
 
-# Configuration
-Set the configuration file path as required
+# 配置文件
+根据实际情况，设置配置文件路径
 ``` shell
-# The configuration file path is specified by SWAN_PATH. 
-# If this environment variable is not configured, the default path is $HOME/.swan/
+# 配置文件路径由 SWAN_PATH 指定，如未配置此环境变量，默认路径为$HOME/.swan/
 cd config
 mkdir -p /root/.swan/provider
 mv *.toml /root/.swan/provider
 cd ..
 ```
 
-Modify the config-pokt.toml file
+修改config-pokt.toml文件
 ``` shell
 vim /root/.swan/provider/config-pokt.toml
 
@@ -38,57 +37,57 @@ pokt_server_api_port=8088                     # Port of pocket server api
 
 ```
 
-# Start the pocket container
+# 启动pocket 容器
 ```shell
-# Installing docker
+# 安装docker
 sudo wget -qO- https://get.docker.com/ | bash
 docker version
 
-Execute the start command
-# 1. If there is no image specified by pokt_docker_image on the local device, it will be pulled from the docker hub to the local device.
-# 2. If the container specified by pokt_docker_name does not exist, create a container and create an initial pocket account according to command parameter passwd.
-# 3. If the container state specified by pokt_docker_name is not a running state, run the container;
-# 4. If pocket node in the container is running properly, the version information and pocket account information can be obtained.
+# 执行启动命令
+# 1. 本机如果没有 pokt_docker_image 指定的image，则从docker hub拉取到本地; 
+# 2. 如果 pokt_docker_name 指定的容器不存在，则创建容器，并根据命令参数passwd，创建pocket初始账号;
+# 3. 如果 pokt_docker_name 指定的容器状态不是运行状态，则运行此容器；
+# 4. 如果 容器中 pocket node 正常运行，则能够获取版本信息及创建的pocket账号信息。
 ./swan-provider pocket start --passwd "123456"
 
-# Check whether the pocket container is running properly
+# 查看pocket 容器是否运行正常
 docker ps
 CONTAINER ID   IMAGE                       COMMAND                  CREATED          STATUS          PORTS     NAMES
 2d4d3e9f991c   filswan/pocket:RC-0.9.1.3   "/usr/bin/expect /ho…"   19 minutes ago   Up 19 minutes             pokt-node-v0.9.1.3
 
-# Check the version through the pocket API to see if the version can be returned correctly
+#通过 pocket API查看版本，是否能够正确返回版本
 curl --url http://127.0.0.1:8081/v1
 "RC-0.9.1.3"
 
-# Check the synchronization height through pocket API to see whether it keeps increasing
+#通过 pocket API查看同步高度，是否不断增高
 curl --request POST --url http://127.0.0.1:8081/v1/query/height --header 'Content-Type: application/json'
 {"height":857}
 
 ```
 
-# Pocket subcommand list
+# Pocket子命令列表
 
 ```shell
-# 1. Start the pocket node server
+# 1. 启动pocket节点服务器
 swan-provider pocket start
 
-# 2. Gets pocket version information
+# 2. 获取pocket版本信息
 ./swan-provider pocket version
 
 Pocket Version is: RC-0.9.1.3 
 
-# 3. Gets the address information of the node in the current container
+# 3. 获取当前容器内节点的address信息
 ./swan-provider pocket nodeaddr
 
 Pocket Node Address is: ffad090789253ad0439c56b7b9c301f90424d5b7 
 
-# 4. Gets the balance information for the specified address
+# 4. 获取指定地址的余额信息
 ./swan-provider pocket balance --addr=ffad090789253ad0439c56b7b9c301f90424d5b7
 
 Address: ffad090789253ad0439c56b7b9c301f90424d5b7 
 Balance: 7454955838 
 
-# 5. Gets the current status of the node
+# 5. 获取节点的当前状态信息
 ./swan-provider pocket status
 Version         : RC-0.9.1.3
 Height          : 77438
@@ -99,7 +98,7 @@ JailedBlock     : 36165
 JailedUntil     : 2021-10-29 15:11:31.418486526 +0000 UTC
 
 
-# 6. Custodial command for staking
+# 6. custodial质押命令
 swan-provider pocket custodial
 --operatorAddress=0123456789012345678901234567890123456789
 --amount=15100000000 
@@ -109,7 +108,7 @@ swan-provider pocket custodial
 --fee=10000 
 --isBefore=false
 
-# 7. Non-Custodial command for staking
+# 7. noncustodial质押命令
 swan-provider pocket noncustodial
 --operatorPublicKey=0123456789012345678901234567890123456789012345678901234567890123 
 --outputAddress=0123456789012345678901234567890123456789
@@ -122,10 +121,10 @@ swan-provider pocket noncustodial
 
 ```
 
-# Provider Server API list
+# Proverer Server API 列表
 
 ``` shell
-# 1.Gets pocket version information
+# 1.获取pocket版本信息
 http://localhost:8088/api/pocket/v1/version
 
 curl --url http://127.0.0.1:8088/api/pocket/v1/version
@@ -138,7 +137,7 @@ curl --url http://127.0.0.1:8088/api/pocket/v1/version
   }
 }
 
-# 2. Gets the current height of the node
+# 2. 获取节点的当前高度信息
 http://localhost:8088/api/pocket/v1/height
 
 curl --url http://127.0.0.1:8088/api/pocket/v1/height
@@ -150,7 +149,7 @@ curl --url http://127.0.0.1:8088/api/pocket/v1/height
   }
 }
 
-# 3. Gets the balance information for the specified account
+# 3. 获取指定账号的余额信息
 http://localhost:8088/api/pocket/v1/balance
 
 curl --request POST --url http://127.0.0.1:8088/api/pocket/v1/balance \
@@ -167,7 +166,7 @@ curl --request POST --url http://127.0.0.1:8088/api/pocket/v1/balance \
   }
 }
 
-#4. Gets the current status of the node
+#4. 获取节点的当前状态信息
 curl --url http://127.0.0.1:8088/api/pocket/v1/status
 {
   "status": "success",
