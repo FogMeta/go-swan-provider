@@ -304,7 +304,7 @@ func (cli *DockerCli) PoktCtnExecVersion() (*models.VersionData, error) {
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "version"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Version Error:", err)
-		return nil, err
+		return &models.VersionData{}, err
 	}
 
 	index := strings.Index(strRes, ":")
@@ -347,76 +347,76 @@ func (cli *DockerCli) PoktCtnExecSetAccount(address string) (string, error) {
 }
 
 func (cli *DockerCli) PoktCtnExecHeight() (*models.HeightData, error) {
+	jOut := &models.HeightData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "height"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Height Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.HeightData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query height result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil
 }
 
 func (cli *DockerCli) PoktCtnExecBalance(address string) (*models.BalanceData, error) {
+	jOut := &models.BalanceData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "balance", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Balance Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.BalanceData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query balance result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil
 }
 
 func (cli *DockerCli) PoktCtnExecSignInfo(address string) ([]*models.SignInfo, error) {
+	jOut := &models.SignInfoResponse{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "signing-info", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Sign Info Error:", err)
-		return nil, err
+		return jOut.Result, err
 	}
 
-	jOut := &models.SignInfoResponse{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query signing-info result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut.Result, err
 	}
 
 	return jOut.Result, nil
 }
 
 func (cli *DockerCli) PoktCtnExecNode(address string) (*models.NodeData, error) {
+	jOut := &models.NodeData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "node", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Node Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.NodeData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query node result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil

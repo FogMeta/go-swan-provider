@@ -244,58 +244,50 @@ func HttpGetPoktNodeAddr(c *gin.Context) {
 
 func HttpGetPoktStatus(c *gin.Context) {
 	poktSvr := GetMyPoktService()
+	data := &models.StatusData{}
 
 	versionData, err := poktSvr.GetCli().PoktCtnExecVersion()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Version = versionData.Version
 	}
 
 	heightData, err := poktSvr.GetCli().PoktCtnExecHeight()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Height = heightData.Height
 	}
 
 	address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Address = address
 	}
 
 	balanceData, err := poktSvr.GetCli().PoktCtnExecBalance(address)
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Balance = balanceData.Balance
 	}
 
 	nodeData, err := poktSvr.GetCli().PoktCtnExecNode(address)
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Jailed = nodeData.Jailed
 	}
 
 	signData, err := poktSvr.GetCli().PoktCtnExecSignInfo(address)
 	if err != nil || len(signData) == 0 {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
-	}
-	signInfo := signData[0]
-
-	data := &models.StatusData{
-		Version:     versionData.Version,
-		Height:      heightData.Height,
-		Address:     address,
-		Balance:     balanceData.Balance,
-		Jailed:      nodeData.Jailed,
-		JailedBlock: signInfo.JailedBlocksCounter,
-		JailedUntil: signInfo.JailedUntil,
+	} else {
+		signInfo := signData[0]
+		data.JailedUntil = signInfo.JailedUntil
+		data.JailedBlock = signInfo.JailedBlocksCounter
 	}
 
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(data))
