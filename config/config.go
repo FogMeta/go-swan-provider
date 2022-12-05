@@ -98,7 +98,6 @@ func requiredFieldsAreGiven(metaData toml.MetaData) bool {
 		{"release"},
 
 		{"lotus"},
-		{"pokt"},
 		{"aria2"},
 		{"main"},
 		{"bid"},

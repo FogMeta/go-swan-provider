@@ -8,6 +8,7 @@ wget --no-check-certificate ${URL_PREFIX}/${TAG_NAME}/${BINARY_NAME}
 wget --no-check-certificate ${URL_PREFIX}/${TAG_NAME}/aria2.conf
 wget --no-check-certificate ${URL_PREFIX}/${TAG_NAME}/aria2c.service
 wget --no-check-certificate ${URL_PREFIX}/${TAG_NAME}/config.toml.example
+wget --no-check-certificate ${URL_PREFIX}/${TAG_NAME}/config-pokt.toml.example
 
 CONF_FILE_DIR=${HOME}/.swan/provider
 mkdir -p ${CONF_FILE_DIR}
@@ -30,6 +31,15 @@ else
     fi
 
     echo "${CONF_FILE_PATH} created"
+fi
+
+CONF_POKT_PATH=${CONF_FILE_DIR}/config-pokt.toml
+echo CONF_POKT_PATH
+if [ -f "${CONF_POKT_PATH}" ]; then
+    echo "${CONF_POKT_PATH} exists"
+else
+    cp ./config-pokt.toml.example CONF_POKT_PATH
+    echo "${CONF_POKT_PATH} created"
 fi
 
 sed -i 's/%%USER%%/'${USER}'/g' ./aria2c.service   # Set User & Group to value of $USER

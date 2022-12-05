@@ -1,27 +1,9 @@
 
+# Build Instructions
 
-# Build swan-provider
-
-``` shell
-#Build Instructions
-git clone https://gitee.com/filswan/go-swan-provider
-cd go-swan-provider
-git checkout -b rpc-provider origin/rpc-provider
-go build -o ./swan-provider main.go
-
-```
+Refer to [README.md](https://github.com/filswan/go-swan-provider/README.md)
 
 # Configuration
-Set the configuration file path as required
-``` shell
-# The configuration file path is specified by SWAN_PATH. 
-# If this environment variable is not configured, the default path is $HOME/.swan/
-cd config
-mkdir -p /root/.swan/provider
-mv *.toml /root/.swan/provider
-cd ..
-```
-
 Modify the config-pokt.toml file
 ``` shell
 vim /root/.swan/provider/config-pokt.toml

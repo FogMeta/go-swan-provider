@@ -1,26 +1,11 @@
 
 
-# 编译 swan-provider
+# 构建方法
 
-``` shell
-#Build Instructions
-git clone https://gitee.com/filswan/go-swan-provider
-cd go-swan-provider
-git checkout -b rpc-provider origin/rpc-provider
-go build -o ./swan-provider main.go
+参考 [README-CN.md](https://github.com/filswan/go-swan-provider/README-CN.md)
 
-```
 
 # 配置文件
-根据实际情况，设置配置文件路径
-``` shell
-# 配置文件路径由 SWAN_PATH 指定，如未配置此环境变量，默认路径为$HOME/.swan/
-cd config
-mkdir -p /root/.swan/provider
-mv *.toml /root/.swan/provider
-cd ..
-```
-
 修改config-pokt.toml文件
 ``` shell
 vim /root/.swan/provider/config-pokt.toml
