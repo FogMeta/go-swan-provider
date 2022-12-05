@@ -1,7 +1,7 @@
 
 # Build Instructions
 
-Refer to [README.md](https://github.com/filswan/go-swan-provider/README.md)
+Refer to [README.md](https://github.com/qinghua8080/go-swan-provider/blob/rpc-provider/README.md)
 
 # Configuration
 Modify the config-pokt.toml file

@@ -2,7 +2,7 @@
 
 # 构建方法
 
-参考 [README-CN.md](https://github.com/filswan/go-swan-provider/README-CN.md)
+参考 [README-CN.md](https://github.com/qinghua8080/go-swan-provider/blob/rpc-provider/README-CN.md)
 
 
 # 配置文件
