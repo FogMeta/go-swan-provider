@@ -15,10 +15,7 @@ set fee [lindex $argv 6]
 set isBefore [lindex $argv 7]
 set passwd [lindex $argv 8]
 
-set command "pocket nodes stake custodial $pubKey $outputAddr $amount $relayChainIDs $serviceURI $networkID $fee $isBefore"
-spawn sh -c "echo $command"
-
-$command
+pocket nodes stake non-custodial $pubKey $outputAddr $amount $relayChainIDs $serviceURI $networkID $fee $isBefore
 sleep 1
 send -- "$passwd\n"
 
