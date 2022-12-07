@@ -36,6 +36,8 @@ type pokt struct {
 	PoktScanInterval  time.Duration `toml:"pokt_scan_interval"`
 	PoktServerApiUrl  string        `toml:"pokt_server_api_url"`
 	PoktServerApiPort int           `toml:"pokt_server_api_port"`
+	PoktNetType       string        `toml:"pokt_net_type"`
+	PoktNetSeed       string        `toml:"pokt_net_seed"`
 }
 
 type aria2 struct {
@@ -158,6 +160,8 @@ func requiredPoktAreGiven(metaData toml.MetaData) bool {
 		{"pokt", "pokt_scan_interval"},
 		{"pokt", "pokt_server_api_url"},
 		{"pokt", "pokt_server_api_port"},
+		{"pokt", "pokt_net_type"},
+		{"pokt", "pokt_net_seed"},
 	}
 
 	for _, v := range requiredFields {

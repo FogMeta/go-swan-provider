@@ -7,3 +7,5 @@ pokt_data_path="/root/.pocket"                # Pocket chain blocks data path
 pokt_scan_interval=600                        # Pocket scan interval
 pokt_server_api_url="http://127.0.0.1:8088/"  # Url of pocket server api
 pokt_server_api_port=8088                     # Port of pocket server api
+pokt_net_type= ""                             # Pocket net type: mainnet or testnet
+pokt_net_seed= ""                             # Pocket seed nodes
