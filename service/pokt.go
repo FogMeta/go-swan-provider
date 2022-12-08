@@ -127,6 +127,13 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 			"start",
 			"--seeds=" + psvc.PoktNetSeed,
 			"--" + psvc.PoktNetType}
+
+		if "simulate" == psvc.PoktNetType {
+			runCmd = []string{
+				"pocket",
+				"start",
+				"--simulateRelay"}
+		}
 		cli.PoktCtnCreateRun(runCmd, env, false)
 
 	}
