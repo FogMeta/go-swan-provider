@@ -7,7 +7,6 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	dc "github.com/docker/docker/client"
-	"io"
 	"io/ioutil"
 	"os"
 	"strings"
@@ -143,13 +142,14 @@ func (cli *DockerCli) PoktCtnCreate() bool {
 }
 
 func (cli *DockerCli) PoktCtnPullAndCreate(cmd, env []string, autoRemove bool) bool {
-	out, err := cli.Client.ImagePull(cli.Ctx, cli.Image, types.ImagePullOptions{})
-	if err != nil {
-		logs.GetLog().Error("Image Pull Error:", err)
-		return false
-	}
-	defer out.Close()
-	io.Copy(os.Stdout, out)
+	//out, err := cli.Client.ImagePull(cli.Ctx, cli.Image, types.ImagePullOptions{})
+	//if err != nil {
+	//	logs.GetLog().Error("Image Pull Error:", err)
+	//	return false
+	//}
+	//defer out.Close()
+	//io.Copy(os.Stdout, out)
+	logs.GetLog().Warn("### Image Pull Skip ###")
 
 	logs.GetLog().Debug("Container Create Para DataPath=", cli.DataPath, " autoRemove=", autoRemove)
 	body, err := cli.Client.ContainerCreate(
