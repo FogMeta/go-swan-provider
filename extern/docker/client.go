@@ -116,13 +116,14 @@ func (cli *DockerCli) UpdateCid() (bool, error) {
 }
 
 func (cli *DockerCli) PoktCtnCreate() bool {
-	out, err := cli.Client.ImagePull(cli.Ctx, cli.Image, types.ImagePullOptions{})
-	if err != nil {
-		logs.GetLog().Error("Image Pull Error:", err)
-		return false
-	}
-	defer out.Close()
-	io.Copy(os.Stdout, out)
+	//out, err := cli.Client.ImagePull(cli.Ctx, cli.Image, types.ImagePullOptions{})
+	//if err != nil {
+	//	logs.GetLog().Error("Image Pull Error:", err)
+	//	return false
+	//}
+	//defer out.Close()
+	//io.Copy(os.Stdout, out)
+	logs.GetLog().Warn("### Image Pull Skip ###")
 
 	body, err := cli.Client.ContainerCreate(
 		cli.Ctx,

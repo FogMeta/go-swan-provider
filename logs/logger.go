@@ -55,7 +55,7 @@ var log *logging.ZapEventLogger
 func GetLog() *logging.ZapEventLogger {
 	if log == nil {
 		log = logging.Logger("pocket")
-		logging.SetLogLevel("pocket", "INFO")
+		logging.SetLogLevel("pocket", "DEBUG")
 	}
 
 	return log
