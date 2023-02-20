@@ -116,11 +116,12 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 			if cli.PoktCtnExist() {
 				logs.GetLog().Info("Wait for Creating Account...")
 				cli.PoktCtnList()
-				time.Sleep(time.Second * 3)
+				time.Sleep(time.Second * 60)
 				continue
 			}
 			break
 		}
+		logs.GetLog().Debug("Init Creating Account Over")
 
 		runCmd := []string{
 			"pocket",
@@ -133,12 +134,17 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 				"pocket",
 				"start",
 				"--simulateRelay"}
+
+			logs.GetLog().Debug("Pocket Start Simulate Relay")
 		}
+
 		cli.PoktCtnCreateRun(runCmd, env, false)
 
 	}
 
-	cli.PoktCtnStart()
+	if !cli.PoktCtnStart() {
+		logs.GetLog().Error("Pocket Start FALSE")
+	}
 }
 
 func (psvc *PoktService) StartScan() {
