@@ -311,6 +311,11 @@ func (cli *DockerCli) PoktCtnExecVersion() (*models.VersionData, error) {
 
 	logs.GetLog().Info("Exec Pocket Version:", strRes)
 	index := strings.Index(strRes, ":")
+	if index < 0 {
+		logs.GetLog().Error("Exec Pocket Version Error: No version info return")
+		return &models.VersionData{}, errors.New("No Version Info ")
+	}
+
 	jOut := &models.VersionData{
 		Version: strings.TrimSuffix(strRes[index+2:], "\n"),
 	}
