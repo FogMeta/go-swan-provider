@@ -110,22 +110,19 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		env := []string{"POCKET_CORE_KEY=", "POCKET_CORE_PASSPHRASE=" + pass}
 
 		accCmd := []string{"pocket", "accounts", "create"}
-		cli.PoktCtnPullAndCreate(accCmd, env, false)
+		cli.PoktCtnPullAndCreate(accCmd, env, true)
 		cli.PoktCtnStart()
 
 		for {
 			if cli.PoktCtnExist() {
 				logs.GetLog().Info("Wait for Creating Account...")
 				cli.PoktCtnList()
-				time.Sleep(time.Second * 60)
+				time.Sleep(time.Second * 3)
 				continue
 			}
 			break
 		}
 		logs.GetLog().Debug("Init Creating Account Over")
-
-		//ONLY TEST
-		panic("ONLY TEST")
 
 		runCmd := []string{
 			"pocket",
