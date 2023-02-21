@@ -95,6 +95,7 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 	cli := psvc.dkCli
 	if !cli.PoktCtnExist() {
 
+		logs.GetLog().Debug("Init Pocket Container ... ")
 		fs := flag.NewFlagSet("Start", flag.ExitOnError)
 		passwd := fs.String("passwd", "", "password for create account")
 		err := fs.Parse(op[1:])
@@ -109,7 +110,7 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		env := []string{"POCKET_CORE_KEY=", "POCKET_CORE_PASSPHRASE=" + pass}
 
 		accCmd := []string{"pocket", "accounts", "create"}
-		cli.PoktCtnPullAndCreate(accCmd, env, true)
+		cli.PoktCtnPullAndCreate(accCmd, env, false)
 		cli.PoktCtnStart()
 
 		for {
@@ -122,6 +123,9 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 			break
 		}
 		logs.GetLog().Debug("Init Creating Account Over")
+
+		//ONLY TEST
+		panic("ONLY TEST")
 
 		runCmd := []string{
 			"pocket",
