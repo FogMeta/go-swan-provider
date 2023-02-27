@@ -106,10 +106,11 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		}
 
 		pass := *passwd
-		logs.GetLog().Debug("POCKET_CORE_PASSPHRASE=", pass)
-		env := []string{"POCKET_CORE_KEY=", "POCKET_CORE_PASSPHRASE=" + pass}
+		logs.GetLog().Debug("POCKET_PASSPHRASE=", pass)
+		env := []string{"POCKET_PASSPHRASE=" + pass}
 
-		accCmd := []string{"pocket", "accounts", "create"}
+		//accCmd := []string{"pocket", "accounts", "create"}
+		accCmd := []string{""}
 		cli.PoktCtnPullAndCreate(accCmd, env, true)
 		cli.PoktCtnStart()
 
