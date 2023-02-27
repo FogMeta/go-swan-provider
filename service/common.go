@@ -96,6 +96,8 @@ func ParsePoktCmd(cmd []string) {
 
 func poktStartScan() {
 	logs.GetLog().Info("Start...")
+	time.Sleep(time.Second * poktService.PoktScanInterval)
+
 	for {
 		poktService.StartScan()
 		logs.GetLog().Info("Sleeping...")
