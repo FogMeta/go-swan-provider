@@ -26,6 +26,7 @@ Swan Provider监听来自Swan平台的离线交易。提供以下功能：
 ## 前提
 - lotus-miner
 - aria2
+- docker
 ### 安装 Aria2 
 ```shell
 sudo apt install aria2
@@ -38,6 +39,10 @@ lotus-miner auth create-token --perm write
 注意，Lotus Miner需要在后台运行！生成的令牌位于 `$LOTUS_MINER_PATH/token`
 
 参考: [Lotus: API tokens](https://lotus.filecoin.io/reference/basics/api-access/)
+
+### 安装 docker
+参考: [官方安装文档](https://docs.docker.com/engine/install/)
+
 
 ## 安装
 ### 选择:one: **预构建软件包**: 参照 [release assets](https://github.com/filswan/go-swan-provider/releases)
@@ -54,7 +59,7 @@ chmod +x ./install.sh
 - 后台运行 `swan-provider` 
 
 ```
-nohup ./swan-provider-2.0.0-linux-amd64 daemon >> swan-provider.log 2>&1 & 
+nohup ./swan-provider-2.0.0-linux-amd64 pocket --passwd 123456 >> swan-provider.log 2>&1 & 
 ```
 ### 选择:two: 从源代码构建
 ####  构建指引
@@ -69,7 +74,7 @@ git checkout release-2.0.0
 - 后台运行 `swan-provider`
 
 ```
-nohup ./swan-provider daemon >> swan-provider.log 2>&1 & 
+nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 & 
 ```
 #### 注意:
 - 日志位于目录 ./logs
@@ -106,6 +111,17 @@ nohup ./swan-provider daemon >> swan-provider.log 2>&1 &
 - **expected_sealing_time:**  默认: 1920 epoch 或 16 小时. 封装交易的预期时间。过早开始交易将被拒绝。
 - **start_epoch:** 默认: 2880 epoch 或 24 小时. 当前 epoch 的相对值。
 - **auto_bid_deal_per_day:** 上述配置的矿工每天的自动竞价任务限制。
+
+
+### [pokt]
+- **pokt_api_url:** 默认 `8081`，pocket api 端口
+- **pokt_access_token:** 访问令牌.可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置". 可以访问操作指南查看。
+- **pokt_docker_image** Docker 镜像，例如 `filswan/pocket:RC-0.9.2`
+- **pokt_docker_name** 容器名称，可自行定义，例如 `pokt-node-v0.9.2`
+- **pokt_data_path** pocket 数据存储路径
+- **pokt_scan_interval** 600秒或10分钟。扫描Pocket高度状态的时间间隔。
+- **pokt_server_api_url** provider pocket 服务Url，例如 `http://127.0.0.1:8088/`
+- **pokt_server_api_port** provider pocket 服务Port，例如 `8088`
 
 ## Swan Provider 命令
  用 `./swan-provider` 命令，与运行中的 swan provider 进程进行交互.
