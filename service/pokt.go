@@ -40,8 +40,6 @@ type PoktService struct {
 	ApiHeartbeatInterval time.Duration
 	PoktServerApiUrl     string
 	PoktServerApiPort    int
-	PoktNetType          string
-	PoktNetSeed          string
 
 	dkImage    string
 	dkName     string
@@ -67,8 +65,6 @@ func GetMyPoktService() *PoktService {
 			ApiHeartbeatInterval: config.GetConfig().Main.SwanApiHeartbeatInterval,
 			PoktServerApiUrl:     confPokt.PoktServerApiUrl,
 			PoktServerApiPort:    confPokt.PoktServerApiPort,
-			PoktNetType:          confPokt.PoktNetType,
-			PoktNetSeed:          confPokt.PoktNetSeed,
 			dkImage:              confPokt.PoktDockerImage,
 			dkName:               confPokt.PoktDockerName,
 			dkConfPath:           confPokt.PoktConfigPath,
