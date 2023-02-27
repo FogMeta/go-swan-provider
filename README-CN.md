@@ -123,7 +123,7 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - **pokt_server_api_url** provider pocket 服务Url，例如 `http://127.0.0.1:8088/`
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`
 
-## Swan Provider 命令
+## Swan Provider 命令77
  用 `./swan-provider` 命令，与运行中的 swan provider 进程进行交互.
 检查 swan-provider 当前的版本
 ```
