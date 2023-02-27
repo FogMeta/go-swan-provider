@@ -125,20 +125,6 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		}
 		logs.GetLog().Debug("Init Creating Account Over")
 
-		//runCmd := []string{
-		//	"pocket",
-		//	"start",
-		//	"--seeds=" + psvc.PoktNetSeed,
-		//	"--" + psvc.PoktNetType}
-		//
-		//if "simulate" == psvc.PoktNetType {
-		//	runCmd = []string{
-		//		"pocket",
-		//		"start",
-		//		"--simulateRelay"}
-		//
-		//	logs.GetLog().Debug("Pocket Start Simulate Relay")
-		//}
 		runCmd := []string{""}
 		env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_TESTNET='true'"}
 		cli.PoktCtnCreateRun(runCmd, env, false)
