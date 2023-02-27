@@ -107,6 +107,7 @@ func poktStartScan() {
 }
 
 func sendHeartbeat2Swan() {
+	time.Sleep(time.Second * poktService.ApiHeartbeatInterval)
 	for {
 		logs.GetLog().Info("Start...")
 		poktService.SendPoktHeartbeatRequest(swanClient)
