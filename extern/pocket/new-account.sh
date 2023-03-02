@@ -8,9 +8,7 @@ if {$argc < 2} {
 set passwd [lindex $argv 0]
 
 set command "pocket accounts create"
-spawn sh -c "echo $command"
-
-$command
+spawn sh -c "$command"
 sleep 1
 send -- "$passwd\n"
 sleep 1

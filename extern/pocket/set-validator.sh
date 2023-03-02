@@ -9,9 +9,7 @@ set address [lindex $argv 0]
 set passwd [lindex $argv 1]
 
 set command "pocket accounts set-validator $address"
-spawn sh -c "echo $command"
-
-$command
+spawn sh -c "$command"
 sleep 1
 send -- "$passwd\n"
 
