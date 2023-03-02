@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+const (
+	POCKET_CONFIG_PATH = "/home/app/.pocket"
+)
+
 var myCli *DockerCli
 
 type DockerCli struct {
@@ -431,7 +435,7 @@ func (cli *DockerCli) PoktCtnExecNode(address string) (*models.NodeData, error) 
 }
 
 func (cli *DockerCli) PoktCtnExecSetValidator(address, passwd string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/set-validator.sh", address, passwd})
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/set-validator.sh", address, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Set Validator Error:", err)
 		return "", err
@@ -442,7 +446,7 @@ func (cli *DockerCli) PoktCtnExecSetValidator(address, passwd string) (string, e
 }
 
 func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Custodial Error:", err)
 		return "", err
@@ -453,7 +457,7 @@ func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, servi
 }
 
 func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket NonCustodial Error:", err)
 		return "", err
