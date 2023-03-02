@@ -197,7 +197,7 @@ func poktHttpServer() {
 	{
 		apiv1.GET("/version", HttpGetPoktVersion)
 		apiv1.GET("/height", HttpGetPoktCurHeight)
-		apiv1.GET("/nodeaddr", HttpGetPoktNodeAddr)
+		apiv1.GET("/validator", HttpGetPoktNodeAddr)
 		apiv1.GET("/status", HttpGetPoktStatus)
 
 		apiv1.POST("/balance", HttpGetPoktBalance)
