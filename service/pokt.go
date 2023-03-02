@@ -45,6 +45,8 @@ type PoktService struct {
 	dkName     string
 	dkConfPath string
 
+	dkNetworkType string
+
 	dkCli *mydc.DockerCli
 
 	PoktAddress string
@@ -68,6 +70,7 @@ func GetMyPoktService() *PoktService {
 			dkImage:              confPokt.PoktDockerImage,
 			dkName:               confPokt.PoktDockerName,
 			dkConfPath:           confPokt.PoktConfigPath,
+			dkNetworkType:        confPokt.PoktNetworkType,
 			CurStatus:            Status{},
 		}
 		myPoktSvr.dkCli = docker.GetMyCli(myPoktSvr.dkImage, myPoktSvr.dkName, myPoktSvr.dkConfPath)
@@ -122,7 +125,15 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		logs.GetLog().Debug("Init Creating Account Over")
 
 		runCmd := []string{""}
-		env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_TESTNET='true'"}
+		if psvc.dkNetworkType == "TESTNET" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_TESTNET='true'"}
+		} else if psvc.dkNetworkType == "MAINNET" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_MAINNET='true'"}
+		} else if psvc.dkNetworkType == "SIMULATE" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_SIMULATE='true'"}
+		}
+		logs.GetLog().Info("Create Pocket ", psvc.dkNetworkType, "")
+
 		cli.PoktCtnCreateRun(runCmd, env, false)
 
 	}
