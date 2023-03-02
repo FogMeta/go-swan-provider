@@ -55,7 +55,7 @@ const ONCHAIN_DEAL_STATUS_AWAITING = "StorageDealAwaitingPreCommit"
 const LOTUS_IMPORT_NUMNBER = 20 //Max number of deals to be imported at a time
 const LOTUS_SCAN_NUMBER = 100   //Max number of deals to be scanned at a time
 
-const API_POCKET_V1 = "/api/pocket/v1"
+const API_POCKET_V1 = "/poktsrv"
 
 var aria2Client *client.Aria2Client
 var swanClient *swan.SwanClient
