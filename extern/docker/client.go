@@ -335,7 +335,7 @@ func (cli *DockerCli) PoktCtnExecNodeAddress() (string, error) {
 		return "", err
 	}
 
-	index := strings.Index(strRes, "Validator Address:")
+	index := strings.Index(strRes, "Validator Address:") + len("Validator Address:")
 	jOut := strRes[index : index+40]
 	logs.GetLog().Debug("pocket query validator address result:", jOut)
 
