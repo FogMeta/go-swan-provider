@@ -243,7 +243,7 @@ func cmdPoktNodeAddr() {
 	confPokt := config.GetPoktConfig().Pokt
 	selfUrl := utils.UrlJoin(confPokt.PoktServerApiUrl, API_POCKET_V1)
 
-	apiUrl := utils.UrlJoin(selfUrl, "nodeaddr")
+	apiUrl := utils.UrlJoin(selfUrl, "validator")
 	response, err := web.HttpGetNoToken(apiUrl, params)
 	if err != nil {
 		fmt.Printf("Get Pocket Node Address err: %s \n", err)
@@ -257,7 +257,7 @@ func cmdPoktNodeAddr() {
 		return
 	}
 
-	title := color.New(color.FgGreen).Sprintf("%s", "Node Address")
+	title := color.New(color.FgGreen).Sprintf("%s", "Validator Address")
 	value := color.New(color.FgYellow).Sprintf("%s", res.Data)
 	fmt.Printf("%s\t: %s\n", title, value)
 
