@@ -148,7 +148,7 @@ type StatusData struct {
 	Address     string    `json:"address"`
 	PublicKey   string    `json:"publicKey"`
 	Balance     uint64    `json:"balance"`
-	Staking     uint64    `json:"staking"`
+	Staking     string    `json:"staking"`
 	Award       string    `json:"award"`
 	Jailed      bool      `json:"jailed"`
 	JailedBlock uint64    `json:"jailedBlock"`
