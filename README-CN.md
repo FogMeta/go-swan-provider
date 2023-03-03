@@ -298,7 +298,7 @@ curl --request POST --url http://127.0.0.1:8088/poktsrv/custodial --header 'Cont
 
 * 设置抵押之前，需要确保对应账号余额大于抵押数量。
 
-* 从最新快照下载将极大地缩短同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。
+* 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。
   ```
   wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket
   ```
