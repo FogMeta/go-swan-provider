@@ -114,7 +114,7 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 
 
 ### [pokt]
-- **pokt_api_url:** 默认 `8081`，pocket api 端口
+- **pokt_api_url:** 默认 `8081`，pocket API 端口
 - **pokt_access_token:** 访问令牌.可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置". 可以访问操作指南查看。
 - **pokt_docker_image** Docker 镜像，例如 `filswan/pocket:RC-0.9.2`
 - **pokt_docker_name** 容器名称，可自行定义，例如 `pokt-node-v0.9.2`

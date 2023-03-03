@@ -78,7 +78,7 @@ func ParsePoktCmd(cmd []string) {
 		poktHttpServer()
 	case "version":
 		cmdPoktVersion()
-	case "nodeaddr":
+	case "validator":
 		cmdPoktNodeAddr()
 	case "balance":
 		cmdPoktBalance(cmd[1:])
@@ -122,7 +122,7 @@ func printPoktUsage() {
 	fmt.Println("USAGE:")
 	fmt.Println("    swan-provider pocket start")
 	fmt.Println("    swan-provider pocket version")
-	fmt.Println("    swan-provider pocket nodeaddr")
+	fmt.Println("    swan-provider pocket validator")
 	fmt.Println("    swan-provider pocket balance --addr=0123456789012345678901234567890123456789")
 	fmt.Println("    swan-provider pocket status")
 	//fmt.Println("    swan-provider pocket custodial")
