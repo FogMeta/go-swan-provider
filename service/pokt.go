@@ -291,6 +291,7 @@ func HttpGetPoktStatus(c *gin.Context) {
 	if err != nil {
 		logs.GetLog().Error(err)
 	} else {
+		data.PublicKey = nodeData.PublicKey
 		data.Jailed = nodeData.Jailed
 	}
 
