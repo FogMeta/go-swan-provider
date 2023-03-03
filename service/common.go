@@ -310,6 +310,7 @@ func cmdPoktCustodial(op []string) {
 	networkID := fs.String("networkID", "", "")
 	fee := fs.String("fee", "", "")
 	isBefore := fs.String("isBefore", "", "")
+	passwd := fs.String("passwd", "", "")
 
 	err := fs.Parse(op[1:])
 	if *operatorAddress == "" || *amount == "" || *relayChainIDs == "" || *serviceURI == "" || *networkID == "" || *fee == "" || *isBefore == "" || err != nil {
@@ -317,7 +318,17 @@ func cmdPoktCustodial(op []string) {
 		return
 	}
 
-	params := ""
+	params := &models.CustodialParams{
+		Address:       *operatorAddress,
+		Amount:        *amount,
+		RelayChainIDs: *relayChainIDs,
+		ServiceURI:    *serviceURI,
+		NetworkID:     *networkID,
+		Fee:           *fee,
+		IsBefore:      *isBefore,
+		Passwd:        *passwd,
+	}
+
 	confPokt := config.GetPoktConfig().Pokt
 	selfUrl := utils.UrlJoin(confPokt.PoktServerApiUrl, API_POCKET_V1)
 
