@@ -146,12 +146,13 @@ type StatusData struct {
 	Version     string    `json:"version"`
 	Height      uint64    `json:"height"`
 	Address     string    `json:"address"`
+	PublicKey   string    `json:"publicKey"`
 	Balance     uint64    `json:"balance"`
+	Staking     uint64    `json:"staking"`
 	Award       string    `json:"award"`
 	Jailed      bool      `json:"jailed"`
 	JailedBlock uint64    `json:"jailedBlock"`
 	JailedUntil time.Time `json:"jailedUntil"`
-	PublicKey   string    `json:"publicKey"`
 }
 
 type ThresholdResponse struct {
