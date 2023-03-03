@@ -70,15 +70,16 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - 需要 **go 1.16+**
   `
 ## 配置
+### 配置 `config.toml` 文件
 - **port:** 默认 `8888`，web api 端口
 - **release:** 默认为 `true`, 在release模式下工作时设置为true；否则为false
 
-### [lotus]
+#### [lotus]
 - **client_api_url:** lotus 客户端的web api对应的Url, 比如 `http://[ip]:[port]/rpc/v0`, 通常来说 `[port]` 是 `1234`. 参照 [Lotus API](https://docs.filecoin.io/reference/lotus-api/)
 - **market_api_url:** lotus 客户端的web api对应的Url, 比如 `http://[ip]:[port]/rpc/v0`, 通常来说 `[port]` 是 `2345`. 当market和miner没有分离时，这也是miner访问令牌的访问令牌. 参照 [Lotus API](https://docs.filecoin.io/reference/lotus-api/)
 - **market_access_token:** lotus market web api的访问令牌. 当market和miner没有分离时，这也是miner访问令牌的访问令牌. 参照 [Obtaining Tokens](https://docs.filecoin.io/build/lotus/api-tokens/#obtaining-tokens)
 
-### [aria2]
+#### [aria2]
 - **aria2_download_dir:** 离线交易文件进行下载以供导入的目录
 - **aria2_host:** Aria2 服务器地址
 - **aria2_port:** Aria2 服务器端口
@@ -86,7 +87,7 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - **aria2_auto_delete_car_file**: 交易状态变为 Active 或 Error 后, 对应的 CAR 文件会被自动删除， 默认: false
 - **aria2_max_downloading_tasks**: Aria2 任务最大下载量, 默认: 10
 
-### [main]
+#### [main]
 - **api_url:** Swan API 地址. 对于 Swan production, 地址为 `https://go-swan-server.filswan.com`
 - :bangbang:**miner_fid:** Filecoin 矿工ID, 须被添加到 Swan Storage Providers 列表， 添加方式:  [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息" -> "作为存储服务商" -> "管理" -> "添加" 。
 - **import_interval:** 600秒或10分钟。每笔交易之间的导入间隔。
@@ -95,14 +96,14 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - **access_token:** 访问令牌。可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置". 可以访问操作指南查看。
 - **api_heartbeat_interval:** 300 秒或 5 分钟. 发送心跳的时间间隔.
 
-### [bid]
+#### [bid]
 - **bid_mode:** 0: 手动, 1: 自动
 - **expected_sealing_time:**  默认: 1920 epoch 或 16 小时. 封装交易的预期时间。过早开始交易将被拒绝。
 - **start_epoch:** 默认: 2880 epoch 或 24 小时. 当前 epoch 的相对值。
 - **auto_bid_deal_per_day:** 上述配置的矿工每天的自动竞价任务限制。
 
-
-### [pokt]
+### 配置 `config-pokt.toml` 文件
+#### [pokt]
 - **pokt_api_url:** 默认 `8081`，pocket API 端口。
 - **pokt_access_token:** 访问令牌.可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置". 可以访问操作指南查看。
 - **pokt_docker_image** Docker 镜像，例如 `filswan/pocket:RC-0.9.2`。
@@ -111,6 +112,7 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - **pokt_scan_interval** 600秒或10分钟。扫描Pocket高度状态的时间间隔。
 - **pokt_server_api_url** provider pocket 服务Url，例如 `http://127.0.0.1:8088/`。
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`。
+- **pokt_network_type** pocket网络类型，可以是 MAINNET 和 TESTNET 其中之一。
 
 ## Swan Provider Pocket 命令
  用 `./swan-provider pocket` 命令，与运行中的 pocket 节点进行交互.
