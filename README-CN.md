@@ -156,7 +156,9 @@ Balance : 39999970000
 Version         : RC-0.9.2
 Height          : 99131
 Address         : ee60841d9afb70ba893c02965537bc0eec4ef1e4
+PublicKey       : 7b1739685dcdc10fcc02bc21dd822ef3458fcf543cc89487af9fe512b573e74d
 Balance         : 39999970000
+Staking         : 20000000000
 Jailed          : false
 JailedBlock     : 0
 JailedUntil     : 0001-01-01 00:00:00 +0000 UTC
@@ -238,9 +240,11 @@ curl --url http://127.0.0.1:8088/poktsrv/status
   "code": "",
   "data": {
     "version": "RC-0.9.2",
-    "height": 99156,
+    "height": 99167,
     "address": "ee60841d9afb70ba893c02965537bc0eec4ef1e4",
-    "balance": 39999930000,
+    "publicKey": "7b1739685dcdc10fcc02bc21dd822ef3458fcf543cc89487af9fe512b573e74d",
+    "balance": 39999910000,
+    "staking": "20000000000",
     "award": "",
     "jailed": false,
     "jailedBlock": 0,

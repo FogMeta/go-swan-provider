@@ -419,8 +419,16 @@ func cmdPoktStatus() {
 	value = color.New(color.FgYellow).Sprintf("%s", res.Data.Address)
 	fmt.Printf("%s\t\t: %s\n", title, value)
 
+	title = color.New(color.FgGreen).Sprintf("%s", "PublicKey")
+	value = color.New(color.FgYellow).Sprintf("%s", res.Data.PublicKey)
+	fmt.Printf("%s\t\t: %s\n", title, value)
+
 	title = color.New(color.FgGreen).Sprintf("%s", "Balance")
 	value = color.New(color.FgYellow).Sprintf("%d", res.Data.Balance)
+	fmt.Printf("%s\t\t: %s\n", title, value)
+
+	title = color.New(color.FgGreen).Sprintf("%s", "Staking")
+	value = color.New(color.FgYellow).Sprintf("%d", res.Data.Staking)
 	fmt.Printf("%s\t\t: %s\n", title, value)
 
 	title = color.New(color.FgGreen).Sprintf("%s", "Jailed")
