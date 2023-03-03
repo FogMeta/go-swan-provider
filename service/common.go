@@ -339,14 +339,14 @@ func cmdPoktCustodial(op []string) {
 		return
 	}
 
-	res := &models.StatusResponse{}
+	res := &models.CustodialResponse{}
 	err = json.Unmarshal(response, res)
 	if err != nil {
 		fmt.Printf("Parse Response (%s) err: %s \n", response, err)
 		return
 	}
 
-	fmt.Printf("Pocket Sratus is: %+v \n", res.Data)
+	fmt.Printf("Pocket Custodial Result is: %+v \n", res.Data)
 }
 
 func cmdPoktNonCustodial(op []string) {
