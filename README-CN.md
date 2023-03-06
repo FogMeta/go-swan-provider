@@ -90,7 +90,14 @@ wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.
 ]
 ```
 
-### 设置 验证节点
+### 充值
+- 使用以下命令发送 POKT:
+```
+pocket accounts send-tx <fromAddr> <toAddr> <uPOKT amount> mainnet 10000 "tx message"
+```
+- 如果正在使用测试网络，可以使用[测试网络水龙头](https://faucet.pokt.network)为账户提供资金。
+
+### 设置验证节点
 - 通过命令设置验证节点地址
 ```
 pocket accounts set-validator [YOUR_ACCOUNT_ADDRESS]
