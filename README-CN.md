@@ -10,8 +10,10 @@
 
 - [特性](#Features)
 - [前提条件](#Prerequisite)
-- [安装](#Installation)
+- [安装部署](#Installation)
 - [配置](#Config)
+- [命令](#)
+- [API](#)
 - [许可证](#license)
 
 ## 特性
@@ -22,7 +24,7 @@ Swan Provider Pocket 提供以下功能：
 * 提供对容器中节点基本设置查询命令。
 * 提供对容器中节点维护监控的接口。
 
-## 前提
+## 前提条件
 - Docker
 
 ### 安装 Docker 
@@ -33,7 +35,7 @@ sudo apt install docker
 参考: [官方安装文档](https://docs.docker.com/engine/install/)
 
 
-## 安装及部署
+## 安装部署
 ### 安装选择:one: **预构建软件包**: 参照 [release assets](https://github.com/filswan/go-swan-provider/releases)
 ####  构建方法
 ```shell
