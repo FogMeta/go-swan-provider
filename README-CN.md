@@ -36,7 +36,7 @@ sudo apt install docker
 
 
 ## 安装部署
-### 安装选择:one: **预构建软件包**: 参照 [release assets](https://github.com/filswan/go-swan-provider/releases)
+### 安装选择:one: **预构建软件包**: 
 ####  构建方法
 ```shell
 mkdir swan-provider
@@ -55,7 +55,7 @@ git checkout release-2.0.0
 ```
 
 ### 配置provider
-- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#Config) 部分
+- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#配置) 部分
 
 ### 运行
 - 后台运行 `swan-provider`
