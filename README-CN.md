@@ -8,13 +8,13 @@
 
 ## 目录
 
-- [特性](#Features)
-- [前提条件](#Prerequisite)
-- [安装部署](#Installation)
-- [配置](#Config)
-- [命令](#)
-- [API](#)
-- [许可证](#license)
+- [特性](#特性)
+- [前提条件](#前提条件)
+- [安装部署](#安装部署)
+- [配置](#配置)
+- [命令](#命令)
+- [API](#API)
+- [许可证](#许可证)
 
 ## 特性
 
@@ -93,10 +93,7 @@ wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.
 ```
 
 ### 充值
-- 使用以下命令发送 POKT:
-```
-pocket accounts send-tx <fromAddr> <toAddr> <uPOKT amount> mainnet 10000 "tx message"
-```
+- 使用命令或钱包，充值高于最低抵押值的POCK，最低抵押值为15,000 POKT（或15,000,000,000 uPOKT）。
 - 如果正在使用测试网络，可以使用[测试网络水龙头](https://faucet.pokt.network)为账户提供资金。
 
 ### 设置验证节点
