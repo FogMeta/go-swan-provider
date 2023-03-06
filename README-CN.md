@@ -33,8 +33,8 @@ sudo apt install docker
 参考: [官方安装文档](https://docs.docker.com/engine/install/)
 
 
-## 安装
-### 选择:one: **预构建软件包**: 参照 [release assets](https://github.com/filswan/go-swan-provider/releases)
+## 安装及部署
+### 安装选择:one: **预构建软件包**: 参照 [release assets](https://github.com/filswan/go-swan-provider/releases)
 ####  构建方法
 ```shell
 mkdir swan-provider
@@ -43,14 +43,7 @@ wget --no-check-certificate https://raw.githubusercontent.com/filswan/go-swan-pr
 chmod +x ./install.sh
 ./install.sh
 ```
-#### 配置并运行
-- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#Config) 部分
-- 后台运行 `swan-provider` 
-
-```
-nohup ./swan-provider-2.0.0-linux-amd64 pocket start --passwd 123456 >> swan-provider.log 2>&1 & 
-```
-### 选择:two: 从源代码构建
+### 安装选择:two: 从源代码构建
 ####  构建指引
 ```shell
 git clone https://github.com/filswan/go-swan-provider.git
@@ -58,17 +51,56 @@ cd go-swan-provider
 git checkout release-2.0.0
 ./build_from_source.sh
 ```
-#### 配置并运行
-- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#Config) 部分
-- 后台运行 `swan-provider`
 
+### 配置provider
+- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#Config) 部分
+
+### 运行
+- 后台运行 `swan-provider`
 ```
-nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 & 
+nohup swan-provider pocket start --passwd 123456 >> swan-provider.log 2>&1 & 
 ```
-#### 注意:
-- 日志位于目录 ./logs
-- 需要 **go 1.16+**
-  `
+
+### 下载快照
+- 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。解压路径 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_data_path` 指定的路径保持一致。
+```
+wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket
+```
+
+### 配置`chains.json`
+- 根据自身需求，配置`config-pokt.toml` 中 `pokt_data_path` 指定的路径下的 `config/chains.json` ，例如：
+```
+[
+    {
+      "id": "0001",
+      "url": "http://localhost:8081/",
+      "basic_auth": {
+        "username": "",
+        "password": ""
+      }
+    },
+    {
+      "id": "0021",
+      "url": "https://eth-rpc.gateway.pokt.network/",
+      "basic_auth": {
+          "username": "",
+          "password": ""
+      }
+    }
+]
+```
+
+### 设置 验证节点
+- 通过命令设置验证节点地址
+```
+pocket accounts set-validator [YOUR_ACCOUNT_ADDRESS]
+```
+
+### 重启容器
+```
+docker restart [CONTAINER_ID]
+```
+
 ## 配置
 ### 配置 `config.toml` 文件
 - **port:** 默认 `8888`，web api 端口
@@ -114,8 +146,8 @@ nohup ./swan-provider pocket --passwd 123456 >> swan-provider.log 2>&1 &
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`。
 - **pokt_network_type** pocket网络类型，可以是 MAINNET 和 TESTNET 其中之一。
 
-## Swan Provider Pocket 命令
- 用 `./swan-provider pocket` 命令，与运行中的 pocket 节点进行交互.
+## 命令
+ 用 `swan-provider pocket` 命令，与运行中的 pocket 节点进行交互.
 
 ### 启动节点
 在容器中部署运行pocket节点：
@@ -182,7 +214,7 @@ http://localhost:8081/v1/client/rawtx
 ```
 
 
-## Swan Provider Pocket 提供API
+## API
 用 API 命令，与运行中的 pocket 节点进行交互.
 
 ### 版本
@@ -294,15 +326,6 @@ curl --request POST --url http://127.0.0.1:8088/poktsrv/custodial --header 'Cont
   }
 }
 ```
-## 注意事项
-
-* 设置抵押之前，需要确保对应账号余额大于抵押数量。
-
-* 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。
-  ```
-  wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket
-  ```
-  解压路径 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_data_path` 指定的路径保持一致
 
 
 ## 帮助
