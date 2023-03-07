@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	POCKET_CONFIG_PATH = "/home/app/.pocket"
+	POCKET_CONFIG_PATH = "/home/app"
 )
 
 var myCli *DockerCli
