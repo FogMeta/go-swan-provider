@@ -328,7 +328,28 @@ func (cli *DockerCli) PoktCtnExecVersion() (*models.VersionData, error) {
 	return jOut, nil
 }
 
-func (cli *DockerCli) PoktCtnExecNodeAddress() (string, error) {
+func (cli *DockerCli) PoktCtnExecInitAddress() (string, error) {
+	strRes, err := cli.PoktCtnExec([]string{"pocket", "accounts", "list"})
+	if err != nil {
+		logs.GetLog().Error("Exec Pocket Node Account Error:", err)
+		return "", err
+	}
+
+	index := strings.Index(strRes, ")")
+	index += 2
+	jOut := strRes[index : index+40]
+	logs.GetLog().Debug("pocket query node account result:", jOut)
+
+	_, finded := os.LookupEnv("TEST_POCKET_MODE")
+	if finded {
+		//ONLY FOR TEST
+		jOut = "ffad090789253ad0439c56b7b9c301f90424d5b7"
+	}
+
+	return jOut, nil
+}
+
+func (cli *DockerCli) PoktCtnExecValidatorAddress() (string, error) {
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "accounts", "get-validator"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Node Account Error:", err)

@@ -262,9 +262,9 @@ func HttpGetPoktCurHeight(c *gin.Context) {
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(cmdOut))
 }
 
-func HttpGetPoktNodeAddr(c *gin.Context) {
+func HttpGetPoktValidatorAddr(c *gin.Context) {
 	poktSvr := GetMyPoktService()
-	cmdOut, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	cmdOut, err := poktSvr.GetCli().PoktCtnExecValidatorAddress()
 	if err != nil {
 		logs.GetLog().Error(err)
 		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
@@ -291,7 +291,8 @@ func HttpGetPoktStatus(c *gin.Context) {
 		data.Height = heightData.Height
 	}
 
-	address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	//address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	address, err := poktSvr.GetCli().PoktCtnExecInitAddress()
 	if err != nil {
 		logs.GetLog().Error(err)
 	} else {
