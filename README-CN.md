@@ -152,6 +152,10 @@ docker restart [CONTAINER_ID]
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`。
 - **pokt_network_type** pocket网络类型，可以是 MAINNET 和 TESTNET 其中之一。
 
+注意：pokt_data_path指定目录存在，并赋予权限：
+```
+sudo mkdir /root/.pocket && sudo chmod 777 /root/.pocket 
+```
 ## 命令
  用 `swan-provider pocket` 命令，与运行中的 pocket 节点进行交互.
 

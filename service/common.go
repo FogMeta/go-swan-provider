@@ -169,6 +169,9 @@ func cmdPoktStart(op []string) {
 	if err != nil {
 		logs.GetLog().Error("Get Pocket Accounts error:", err)
 	}
+	if !strings.Contains(acc, "(0) ") {
+		panic("Get Init Pocket Accounts Error.")
+	}
 	poktService.PoktAddress = strings.Split(acc, "(0) ")[1][0:40]
 	poktService.CurStatus.Address = poktService.PoktAddress
 	logs.GetLog().Info("Pocket Accounts is:", poktService.PoktAddress)
