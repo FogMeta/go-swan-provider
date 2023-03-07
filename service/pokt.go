@@ -81,6 +81,8 @@ func GetMyPoktService() *PoktService {
 			logs.GetLog().Error("Create ", myPoktSvr.dkConfPath, "error: ", err)
 			panic("Create Pocket Data Path Error")
 		}
+		os.Chmod(myPoktSvr.dkConfPath, perm)
+
 		myPoktSvr.dkCli = docker.GetMyCli(myPoktSvr.dkImage, myPoktSvr.dkName, myPoktSvr.dkConfPath)
 
 		logs.GetLog().Debugf("New myPoktSvr :%+v ", *myPoktSvr)
