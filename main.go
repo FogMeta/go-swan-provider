@@ -7,6 +7,7 @@ import (
 	"swan-provider/common"
 	"swan-provider/common/constants"
 	"swan-provider/config"
+	"swan-provider/extern/pocket"
 	"swan-provider/routers"
 	"swan-provider/service"
 	"time"
@@ -31,6 +32,9 @@ func main() {
 	case "daemon":
 		service.AdminOfflineDeal()
 		createHttpServer()
+	case "pocket":
+		pockCmd := os.Args[1:]
+		pocket.ParsePoktCmd(pockCmd)
 	default:
 		printUsage()
 	}
@@ -52,6 +56,7 @@ func printUsage() {
 	fmt.Println("USAGE:")
 	fmt.Println("    swan-provider version")
 	fmt.Println("    swan-provider daemon")
+	fmt.Println("    swan-provider pocket")
 }
 
 func createHttpServer() {

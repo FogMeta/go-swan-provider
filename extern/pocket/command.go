@@ -17,6 +17,35 @@ import (
 
 var poktService *PoktService
 
+func ParsePoktCmd(cmd []string) {
+	if len(cmd) < 2 {
+		printPoktUsage()
+		return
+	}
+
+	subCmd := cmd[1]
+	switch subCmd {
+	case "start":
+		cmdPoktStart(cmd[1:])
+		poktHttpServer()
+	case "version":
+		cmdPoktVersion()
+	case "validator":
+		cmdPoktNodeAddr()
+	case "balance":
+		cmdPoktBalance(cmd[1:])
+	case "custodial":
+		cmdPoktCustodial(cmd[1:])
+	case "noncustodial":
+		cmdPoktNonCustodial(cmd[1:])
+	case "status":
+		cmdPoktStatus()
+	default:
+		printPoktUsage()
+	}
+
+}
+
 func cmdPoktStart(op []string) {
 	confPokt := GetConfig()
 	SetLogLevel(confPokt.PoktLogLevel)
