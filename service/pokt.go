@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 	"swan-provider/common"
 	"swan-provider/config"
@@ -72,6 +73,13 @@ func GetMyPoktService() *PoktService {
 			dkConfPath:           confPokt.PoktConfigPath,
 			dkNetworkType:        confPokt.PoktNetworkType,
 			CurStatus:            Status{},
+		}
+		// 新目录名称和权限属性
+		perm := os.FileMode(0777)
+		err := os.MkdirAll(myPoktSvr.dkConfPath, perm)
+		if err != nil {
+			logs.GetLog().Error("Create ", myPoktSvr.dkConfPath, "error: ", err)
+			panic("Create Pocket Data Path Error")
 		}
 		myPoktSvr.dkCli = docker.GetMyCli(myPoktSvr.dkImage, myPoktSvr.dkName, myPoktSvr.dkConfPath)
 
@@ -209,7 +217,7 @@ func (psvc *PoktService) SendPoktHeartbeatRequest(swanClient *swan.SwanClient) {
 		title = color.New(color.FgGreen).Sprintf("%s", "Balance")
 		value = color.New(color.FgYellow).Sprintf("%d", res.Data.Balance)
 		fmt.Printf("%s\t\t: %s\n", title, value)
-		
+
 		title = color.New(color.FgGreen).Sprintf("%s", "Staking")
 		value = color.New(color.FgYellow).Sprintf("%s", res.Data.Staking)
 		fmt.Printf("%s\t\t: %s\n", title, value)
