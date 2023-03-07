@@ -102,6 +102,12 @@ wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.
 pocket accounts set-validator [YOUR_ACCOUNT_ADDRESS]
 ```
 
+### 抵押
+-- 通过命令抵押POCK
+```
+pocket nodes stake custodial <operatorAddress> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
+```
+
 ### 重启容器
 ```
 docker restart [CONTAINER_ID]
