@@ -17,7 +17,6 @@ type Configuration struct {
 	Main     main   `toml:"main"`
 	Bid      bid    `toml:"bid"`
 	Lotus    lotus  `toml:"lotus"`
-	Pokt     pokt   `toml:"pokt"`
 }
 
 type lotus struct {
@@ -26,17 +25,19 @@ type lotus struct {
 	MarketAccessToken string `toml:"market_access_token"`
 }
 
-type pokt struct {
-	PoktApiUrl        string        `toml:"pokt_api_url"`
-	PoktAccessToken   string        `toml:"pokt_access_token"`
-	PoktAddress       string        `toml:"pokt_address"`
-	PoktDockerImage   string        `toml:"pokt_docker_image"`
-	PoktDockerName    string        `toml:"pokt_docker_name"`
-	PoktConfigPath    string        `toml:"pokt_path"`
-	PoktNetworkType   string        `toml:"pokt_network_type"`
-	PoktScanInterval  time.Duration `toml:"pokt_scan_interval"`
-	PoktServerApiUrl  string        `toml:"pokt_server_api_url"`
-	PoktServerApiPort int           `toml:"pokt_server_api_port"`
+type PoktConfig struct {
+	PoktLogLevel          string        `toml:"pokt_log_level"`
+	PoktApiUrl            string        `toml:"pokt_api_url"`
+	PoktAccessToken       string        `toml:"pokt_access_token"`
+	PoktAddress           string        `toml:"pokt_address"`
+	PoktDockerImage       string        `toml:"pokt_docker_image"`
+	PoktDockerName        string        `toml:"pokt_docker_name"`
+	PoktConfigPath        string        `toml:"pokt_path"`
+	PoktScanInterval      time.Duration `toml:"pokt_scan_interval"`
+	PoktHeartbeatInterval time.Duration `toml:"pokt_heartbeat_interval"`
+	PoktServerApiUrl      string        `toml:"pokt_server_api_url"`
+	PoktServerApiPort     int           `toml:"pokt_server_api_port"`
+	PoktNetworkType       string        `toml:"pokt_network_type"`
 }
 
 type aria2 struct {
@@ -151,15 +152,17 @@ func InitPoktConfig(configFile string) {
 
 func requiredPoktAreGiven(metaData toml.MetaData) bool {
 	requiredFields := [][]string{
+		{"pokt", "log_level"},
 		{"pokt", "pokt_api_url"},
 		{"pokt", "pokt_access_token"},
 		{"pokt", "pokt_docker_image"},
 		{"pokt", "pokt_docker_name"},
 		{"pokt", "pokt_path"},
-		{"pokt", "pokt_network_type"},
 		{"pokt", "pokt_scan_interval"},
+		{"pokt", "pokt_heartbeat_interval"},
 		{"pokt", "pokt_server_api_url"},
 		{"pokt", "pokt_server_api_port"},
+		{"pokt", "pokt_network_type"},
 	}
 
 	for _, v := range requiredFields {
