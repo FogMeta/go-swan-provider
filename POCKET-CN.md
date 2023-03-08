@@ -55,7 +55,7 @@ git checkout release-2.0.0
 ```
 
 ### 配置provider
-- 编辑配置文件 **~/.swan/provider/config.toml** 和 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#配置) 部分
+- 编辑配置文件 **~/.swan/provider/config-pokt.toml**, 参照 [配置](#配置) 部分
 
 ### 运行
 - 后台运行 `swan-provider`
