@@ -76,7 +76,7 @@ else
     echo "${CONF_FILE_DIR}/config-pokt.toml created"
 fi
 
-POKT_CHAINS_FILE=${CONF_FILE_DIR}/config-pokt.toml
+POKT_CHAINS_FILE=${CONF_FILE_DIR}/chains.json
 if [ -f "${POKT_CHAINS_FILE}" ]; then
     echo "${POKT_CHAINS_FILE} exists"
 else
@@ -84,7 +84,7 @@ else
     echo "${CONF_FILE_DIR}/chains.json created"
 fi
 
-POKT_GENESIS_FILE=${CONF_FILE_DIR}/config-pokt.toml
+POKT_GENESIS_FILE=${CONF_FILE_DIR}/genesis.json
 if [ -f "${POKT_GENESIS_FILE}" ]; then
     echo "${POKT_GENESIS_FILE} exists"
 else
