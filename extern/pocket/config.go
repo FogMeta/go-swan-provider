@@ -60,17 +60,17 @@ func initPoktConfig(configFile string) {
 
 func requiredPoktAreGiven(metaData toml.MetaData) bool {
 	requiredFields := [][]string{
-		{"pokt", "log_level"},
-		{"pokt", "pokt_api_url"},
-		{"pokt", "pokt_access_token"},
-		{"pokt", "pokt_docker_image"},
-		{"pokt", "pokt_docker_name"},
-		{"pokt", "pokt_path"},
-		{"pokt", "pokt_scan_interval"},
-		{"pokt", "pokt_heartbeat_interval"},
-		{"pokt", "pokt_server_api_url"},
-		{"pokt", "pokt_server_api_port"},
-		{"pokt", "pokt_network_type"},
+		{"log_level"},
+		{"pokt_api_url"},
+		{"pokt_access_token"},
+		{"pokt_docker_image"},
+		{"pokt_docker_name"},
+		{"pokt_path"},
+		{"pokt_scan_interval"},
+		{"pokt_heartbeat_interval"},
+		{"pokt_server_api_url"},
+		{"pokt_server_api_port"},
+		{"pokt_network_type"},
 	}
 
 	for _, v := range requiredFields {
