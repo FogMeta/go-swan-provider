@@ -172,6 +172,18 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		} else if psvc.dkNetworkType == "SIMULATE" {
 			env = []string{"POCKET_SIMULATE='true'"}
 		}
+
+		chains := ReadPocketChains()
+		if chains != "" {
+			if psvc.dkNetworkType == "TESTNET" {
+				env = []string{"POCKET_TESTNET='true'", "POCKET_CORE_CHAINS=", chains}
+			} else if psvc.dkNetworkType == "MAINNET" {
+				env = []string{"POCKET_MAINNET='true'", "POCKET_CORE_CHAINS=", chains}
+			} else if psvc.dkNetworkType == "SIMULATE" {
+				env = []string{"POCKET_SIMULATE='true'", "POCKET_CORE_CHAINS=", chains}
+			}
+		}
+
 		GetLog().Info("Create Pocket ", psvc.dkNetworkType, "")
 
 		cli.PoktCtnCreateRun(runCmd, env, false)

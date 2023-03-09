@@ -1,6 +1,7 @@
 package pocket
 
 import (
+	"encoding/json"
 	"github.com/BurntSushi/toml"
 	"os"
 	"path/filepath"
@@ -85,4 +86,39 @@ func requiredPoktAreGiven(metaData toml.MetaData) bool {
 	}
 
 	return true
+}
+
+func ReadPocketChains() string {
+	configPath := os.Getenv("SWAN_PATH")
+	if configPath == "" {
+		homedir, err := os.UserHomeDir()
+		if err != nil {
+			GetLog().Fatal("Cannot get home directory.")
+			return ""
+		}
+
+		configPath = filepath.Join(homedir, ".swan/")
+	}
+
+	chainsFile, err := os.Open(filepath.Join(configPath, "provider/chains.json"))
+	if err != nil {
+		GetLog().Error("Open chains.json error:", err)
+		return ""
+	}
+
+	decoder := json.NewDecoder(chainsFile)
+	var data interface{}
+	err = decoder.Decode(&data)
+	if err != nil {
+		GetLog().Error("Decoder chains.json error:", err)
+		return ""
+	}
+	chains, ok := data.(string)
+	if !ok {
+		GetLog().Error("Decoder chains.json error")
+		return ""
+	}
+
+	GetLog().Info("chains.json :", chains)
+	return chains
 }
