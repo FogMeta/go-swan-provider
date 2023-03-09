@@ -91,20 +91,20 @@ func getSwanClient() *swan.SwanClient {
 	swanAccessToken := confPokt.SwanAccessToken
 
 	if len(swanApiUrl) == 0 {
-		GetLog().Fatal("please set config-pokt->swan_api_url")
+		GetLog().Error("please set config-pokt->swan_api_url")
 	}
 
 	if len(swanApiKey) == 0 {
-		GetLog().Fatal("please set config-pokt->swan_api_key")
+		GetLog().Error("please set config-pokt->swan_api_key")
 	}
 
 	if len(swanAccessToken) == 0 {
-		GetLog().Fatal("please set config-pokt->swan_access_token")
+		GetLog().Error("please set config-pokt->swan_access_token")
 	}
 
 	swanClient, err := swan.GetClient(swanApiUrl, swanApiKey, swanAccessToken, "")
 	if err != nil {
-		GetLog().Fatal(err)
+		GetLog().Error("Get Swan Client Error: ", err)
 	}
 
 	return swanClient
@@ -113,8 +113,8 @@ func getSwanClient() *swan.SwanClient {
 func sendHeartbeat2Swan() {
 	time.Sleep(time.Second * poktService.ApiHeartbeatInterval)
 	swanClient := getSwanClient()
+	GetLog().Info("HeartBeats Start...")
 	for {
-		GetLog().Info("Start...")
 		poktService.SendPoktHeartbeatRequest(swanClient)
 		GetLog().Info("Sleeping...")
 		time.Sleep(time.Second * poktService.ApiHeartbeatInterval)
@@ -122,7 +122,7 @@ func sendHeartbeat2Swan() {
 }
 
 func poktStartScan() {
-	GetLog().Info("Start...")
+	GetLog().Info("Scan Start...")
 	time.Sleep(time.Second * poktService.PoktScanInterval)
 
 	for {
