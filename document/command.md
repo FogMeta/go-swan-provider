@@ -100,6 +100,16 @@ swan-provider pocket custodial --operatorAddress="ee60841d9afb70ba893c02965537bc
 
 ```
 
+参数：
+
+- **operatorAddress：** 欲质押 uPOKT 的地址。
+- **amount：** 要质押的 uPOKT 数量。必须高于 StakeMinimum 当前值，可以在此处找到。
+- **relayChainIDs：** 用逗号分隔的 RelayChain 网络标识符列表。可以在此处找到网络标识符列表。
+- **serviceURI：** 应用程序用于与中继节点通信的服务 URI。
+- **networkID：** Pocket 链标识符，可以是 "mainnet" 或 "testnet"。
+- **fee：** 网络所需的 uPOKT 费用。
+- **isBefore：** 指示是否激活了非托管升级，可以是 "true" 或 "false"。
+
 输出:
 
 ```shell
