@@ -77,13 +77,42 @@ func cmdPoktStart(op []string) {
 	GetLog().Info("Pocket Accounts is:", poktService.PoktAddress)
 
 	// not ready for heartbeat
-	//go sendHeartbeat2Swan()
+	go sendHeartbeat2Swan()
 
 	go poktStartScan()
 }
 
-func sendHeartbeat2Swan(swanClient *swan.SwanClient) {
+func getSwanClient() *swan.SwanClient {
+	var err error
+	confPokt := GetConfig()
+
+	swanApiUrl := confPokt.SwanApiUrl
+	swanApiKey := confPokt.SwanApiKey
+	swanAccessToken := confPokt.SwanAccessToken
+
+	if len(swanApiUrl) == 0 {
+		GetLog().Fatal("please set config-pokt->swan_api_url")
+	}
+
+	if len(swanApiKey) == 0 {
+		GetLog().Fatal("please set config-pokt->swan_api_key")
+	}
+
+	if len(swanAccessToken) == 0 {
+		GetLog().Fatal("please set config-pokt->swan_access_token")
+	}
+
+	swanClient, err := swan.GetClient(swanApiUrl, swanApiKey, swanAccessToken, "")
+	if err != nil {
+		GetLog().Fatal(err)
+	}
+
+	return swanClient
+}
+
+func sendHeartbeat2Swan() {
 	time.Sleep(time.Second * poktService.ApiHeartbeatInterval)
+	swanClient := getSwanClient()
 	for {
 		GetLog().Info("Start...")
 		poktService.SendPoktHeartbeatRequest(swanClient)

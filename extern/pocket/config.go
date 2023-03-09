@@ -8,9 +8,12 @@ import (
 )
 
 type PoktConfig struct {
+	SwanApiUrl      string `toml:"swan_api_url"`
+	SwanApiKey      string `toml:"swan_api_key"`
+	SwanAccessToken string `toml:"swan_access_token"`
+
 	PoktLogLevel          string        `toml:"pokt_log_level"`
 	PoktApiUrl            string        `toml:"pokt_api_url"`
-	PoktAccessToken       string        `toml:"pokt_access_token"`
 	PoktAddress           string        `toml:"pokt_address"`
 	PoktDockerImage       string        `toml:"pokt_docker_image"`
 	PoktDockerName        string        `toml:"pokt_docker_name"`
@@ -60,9 +63,11 @@ func initPoktConfig(configFile string) {
 
 func requiredPoktAreGiven(metaData toml.MetaData) bool {
 	requiredFields := [][]string{
+		{"swan_api_url"},
+		{"swan_api_key"},
+		{"swan_access_token"},
 		{"pokt_log_level"},
 		{"pokt_api_url"},
-		{"pokt_access_token"},
 		{"pokt_docker_image"},
 		{"pokt_docker_name"},
 		{"pokt_path"},

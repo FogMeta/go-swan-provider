@@ -31,8 +31,10 @@ type Status struct {
 }
 
 type PoktService struct {
+	SwanApiUrl           string
+	SwanApiKey           string
+	SwanAccessToken      string
 	PoktApiUrl           string
-	PoktAccessToken      string
 	PoktScanInterval     time.Duration
 	ApiHeartbeatInterval time.Duration
 	PoktServerApiUrl     string
@@ -58,8 +60,10 @@ func GetMyPoktService() *PoktService {
 		confPokt := GetConfig()
 
 		myPoktSvr = &PoktService{
+			SwanApiUrl:           confPokt.SwanApiUrl,
+			SwanApiKey:           confPokt.SwanApiKey,
+			SwanAccessToken:      confPokt.SwanAccessToken,
 			PoktApiUrl:           confPokt.PoktApiUrl,
-			PoktAccessToken:      confPokt.PoktAccessToken,
 			PoktScanInterval:     confPokt.PoktScanInterval,
 			ApiHeartbeatInterval: confPokt.PoktHeartbeatInterval,
 			PoktServerApiUrl:     confPokt.PoktServerApiUrl,
