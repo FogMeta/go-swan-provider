@@ -88,7 +88,7 @@ POKT_GENESIS_FILE=${CONF_FILE_DIR}/genesis.json
 if [ -f "${POKT_GENESIS_FILE}" ]; then
     echo "${POKT_GENESIS_FILE} exists"
 else
-    cp ./config/pokt/mainnet-genesis.json ${CONF_FILE_DIR}/mainnet-genesis.json
+    cp ./config/pokt/mainnet-genesis.json ${CONF_FILE_DIR}/genesis.json
     echo "${CONF_FILE_DIR}/genesis.json created"
 fi
 
