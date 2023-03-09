@@ -97,7 +97,7 @@ nohup ./swan-provider pocket start --passwd 123456 >> provider-pokt.log 2>&1 &
 ```
 
 ### 充值
-- 使用命令或钱包，充值高于最低抵押值的POCK，最低抵押值为15,000 POKT（或15,000,000,000 uPOKT）。
+- 使用命令或钱包，充值高于最低抵押值的 POCK，最低抵押值为15,000 POKT（或15,000,000,000 uPOKT）。
 - 如果正在使用测试网络，可以使用[测试网络水龙头](https://faucet.pokt.network)为账户提供资金。
 
 ### 设置验证节点
@@ -114,7 +114,7 @@ pocket accounts get-validator
 ```
 
 ### 抵押
--- 通过命令抵押POCK
+- 通过命令抵押 POCK
 ```
 # 进入容器
 docker exec -it  [CONTAINER_ID] /bin/sh
@@ -122,7 +122,7 @@ docker exec -it  [CONTAINER_ID] /bin/sh
 # custodial抵押
 pocket nodes stake custodial <operatorAddress> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
 
-# 或者 non-custodial 抵押
+# non-custodial 抵押
 pocket nodes stake non-custodial <operatorPublicKey> <outputAddress> <amount> <RelayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
 ```
 
