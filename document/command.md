@@ -21,12 +21,6 @@
 swan-provider pocket start --passwd "123456"
 ```
 
-输出:
-
-```shell
-
-```
-
 
 ## 查看版本
 

@@ -12,13 +12,11 @@
 - [前提条件](#前提条件)
 - [安装部署](#安装部署)
 - [配置](#配置)
-- [命令](#命令)
-- [API](#API)
 - [许可证](#许可证)
 
 ## 特性
 
-Swan Provider Pocket 提供以下功能：
+RPC Provider Guideline 提供以下功能：
 
 * 在容器中自动部署pocket节点。
 * 提供对容器中节点基本设置查询命令。
@@ -38,7 +36,7 @@ sudo apt install docker
 ```shell
 git clone https://github.com/filswan/go-swan-provider.git
 cd go-swan-provider
-git checkout release-2.0.0
+git checkout release-2.1.0
 make
 ```
 
@@ -59,8 +57,8 @@ make
 ### 下载快照
 - 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。解压路径 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_data_path` 指定的路径保持一致。
 ```
-mkdir -p /root/.pocket
-wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket
+mkdir -p /root/.pocket/data
+wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket/data
 ```
 
 ### 配置`chains.json`
@@ -102,8 +100,11 @@ nohup swan-provider pocket start --passwd 123456 >> swan-provider.log 2>&1 &
 # 进入容器
 docker exec -it  [CONTAINER_ID] /bin/sh
 
-# 执行命令
+# 执行设置命令
 pocket accounts set-validator [YOUR_ACCOUNT_ADDRESS]
+
+# 查看执行结果
+pocket accounts get-validator
 ```
 
 ### 抵押
@@ -112,124 +113,9 @@ pocket accounts set-validator [YOUR_ACCOUNT_ADDRESS]
 # 进入容器
 docker exec -it  [CONTAINER_ID] /bin/sh
 
-# 执行命令
+# 执行抵押命令
 pocket nodes stake custodial <operatorAddress> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
 ```
-
-
-## API
-用 API 命令，与运行中的 pocket 节点进行交互.
-
-### 版本
-检查运行中 pocket 的当前版本
-```
-curl --url http://127.0.0.1:8088/poktsrv/version 
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "version": "RC-0.9.2"
-  }
-}
-```
-
-### 高度
-检查运行中 pocket 的当前区块高度
-```
-curl --url http://127.0.0.1:8088/poktsrv/height
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "height": 99156
-  }
-}
-```
-
-### 账户余额
-检查指定账号的余额
-```
-curl --request POST --url http://127.0.0.1:8088/poktsrv/balance --header 'Content-Type: application/json' \
---data "{\"height\": 0,\"address\":\"ee60841d9afb70ba893c02965537bc0eec4ef1e4\"}"
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "height": 0,
-    "address": "ee60841d9afb70ba893c02965537bc0eec4ef1e4",
-    "balance": "39999930000"
-  }
-}
-```
-
-### 状态信息
-检查运行中 pocket 的状态信息
-```
-curl --url http://127.0.0.1:8088/poktsrv/status
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "version": "RC-0.9.2",
-    "height": 99167,
-    "address": "ee60841d9afb70ba893c02965537bc0eec4ef1e4",
-    "publicKey": "7b1739685dcdc10fcc02bc21dd822ef3458fcf543cc89487af9fe512b573e74d",
-    "balance": 39999910000,
-    "staking": "20000000000",
-    "award": "",
-    "jailed": false,
-    "jailedBlock": 0,
-    "jailedUntil": "0001-01-01T00:00:00Z"
-  }
-}
-```
-
-### 设置验证节点
-设置运行中 pocket 的验证节点账户
-```
-curl --request POST --url http://127.0.0.1:8088/poktsrv/set-validator --header 'Content-Type: application/json' \
---data "{\"passwd\": \"123456\",\"address\":\"ee60841d9afb70ba893c02965537bc0eec4ef1e4\"}"
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "result": "spawn sh -c pocket accounts set-validator ee60841d9afb70ba893c02965537bc0eec4ef1e4\r\n\2023/03/03 03:06:37 Initializing Pocket Datadir\r\n2023/03/03 03:06:37 datadir = /home/app/.pocket\r\nEnter the password:\r\n"
-  }
-}
-```
-
-### 查看验证节点
-检查运行中 pocket 的验证节点账户
-```
-curl --url http://127.0.0.1:8088/poktsrv/validator
-
-{
-  "status": "success",
-  "code": "",
-  "data": "ee60841d9afb70ba893c02965537bc0eec4ef1e4"
-}
-```
-
-### 抵押
-设置节点抵押
-```
-curl --request POST --url http://127.0.0.1:8088/poktsrv/custodial --header 'Content-Type: application/json' \
---data "{\"address\":\"ee60841d9afb70ba893c02965537bc0eec4ef1e4\",\"amount\": \"20000000000\",\"relay_chain_ids\": \"0001,0021\",\"service_url\": \"http://pokt.storefrontiers.cn:80\",\"network_id\": \"testnet\",\"fee\": \"10000\",\"is_before\": \"false\",\"passwd\": \"123456\"}"
-
-{
-  "status": "success",
-  "code": "",
-  "data": {
-    "result": "spawn sh -c pocket nodes stake custodial ee60841d9afb70ba893c02965537bc0eec4ef1e4 20000000000 0001,0021 http://pokt.storefrontiers.cn:80 testnet 10000 false\r\n 2023/03/03 03:15:32 Initializing Pocket Datadir\r\n2023/03/03 03:15:32 datadir = /home/app/.pocket\r\nEnter Passphrase: \r\nhttp://localhost:8081/v1/client/rawtx\r\n{\r\n    \"logs\": null,\r\n    \"txhash\": \"0A025220D33B84525E99AFD5BE7ECA95D6234AFB40CD21901700A7F706DE12E7\"\r\n}\r\n\r\n"
-  }
-}
-```
-
 
 ## 帮助
 
