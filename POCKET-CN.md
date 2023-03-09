@@ -40,10 +40,10 @@ git checkout release-2.1.0
 
 ### 配置 `config-pokt.toml`
 #### 编辑配置文件 **~/.swan/provider/config-pokt.toml** :
-- **swan_api_url:**  Swan API 地址. 对于 Swan production, 地址为 `https://go-swan-server.filswan.com`
-- **swan_api_key:**  API key。可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置" 获得，也可以访问操作指南。
-- **swan_access_token:** 访问令牌.可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置". 可以访问操作指南查看。
-- **pokt_log_level:** 默认`INFO`,可选 DEBUG INFO WARN ERROR FATAL
+- **swan_api_url:**  Swan API 地址。 对于 Swan production， 地址为 `https://go-swan-server.filswan.com`。
+- **swan_api_key:**  API key。可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置" 获得， 也可以访问操作指南。
+- **swan_access_token:** 访问令牌。可以通过 [Swan Platform](https://console.filswan.com/#/dashboard) -> "个人信息"->"开发人员设置"， 可以访问操作指南查看。
+- **pokt_log_level:** 默认`INFO`，可选 DEBUG INFO WARN ERROR FATAL。
 - **pokt_api_url:** 默认 `8081`，pocket API 端口。
 - **pokt_docker_image** Docker 镜像，例如 `filswan/pocket:RC-0.9.2`。
 - **pokt_docker_name** 容器名称，可自行定义，例如 `pokt-node-v0.9.2`。
