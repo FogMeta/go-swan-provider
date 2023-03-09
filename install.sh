@@ -67,6 +67,23 @@ fi
 sudo systemctl enable aria2c.service           # Set to start Aria2 automatically
 sudo systemctl restart aria2c.service            # Start Aria2
 
+
+POKT_FILE_PATH=${CONF_FILE_DIR}/config-pokt.toml
+echo POKT_FILE_PATH
+
+if [ -f "${POKT_FILE_PATH}" ]; then
+    echo "${POKT_FILE_PATH} exists"
+else
+    cp ./config/pokt/config-pokt.toml.example ${CONF_FILE_DIR}/config-pokt.toml
+    echo "${CONF_FILE_DIR}/config-pokt.toml created"
+
+    cp ./config/pokt/chains.json ${CONF_FILE_DIR}/chains.json
+    echo "${CONF_FILE_DIR}/chains.json created"
+
+    cp ./config/pokt/mainnet-genesis.json ${CONF_FILE_DIR}/mainnet-genesis.json
+    echo "${CONF_FILE_DIR}/genesis.json created"
+fi
+
 chmod +x ./${BINARY_NAME}
 
 
