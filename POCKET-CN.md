@@ -81,6 +81,7 @@ git checkout release-2.1.0
 ```
 mkdir -p /root/.pocket/config
 cp ~/.swan/provider/chains.json /root/.pocket/config/chains.json
+chmod -R 777 /root/.pocket
 ```
 
 ### 下载快照
@@ -88,6 +89,7 @@ cp ~/.swan/provider/chains.json /root/.pocket/config/chains.json
 ```
 mkdir -p /root/.pocket/data
 wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket/data
+chmod -R 777 /root/.pocket
 ```
 
 ### 运行
