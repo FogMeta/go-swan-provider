@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"time"
 )
 
 const (
@@ -270,11 +271,8 @@ func (cli *DockerCli) PoktCtnStart() bool {
 }
 
 func (cli *DockerCli) PoktCtnStop() bool {
-	timeout := 10
-	err := cli.Client.ContainerStop(cli.Ctx, cli.Cid, container.StopOptions{
-		Signal:  "SIGKILL",
-		Timeout: &timeout,
-	})
+	timeout := time.Second * 5
+	err := cli.Client.ContainerStop(cli.Ctx, cli.Cid, &timeout)
 	if err != nil {
 		GetLog().Error("Container Stop Error:", err)
 		return false
