@@ -77,7 +77,7 @@ git checkout release-2.1.0
 ]
 ```
 
-- 复制 **~/.swan/provider/chains.json** 到 `config-pokt.toml` 中 `pokt_path`指定路径，例如： `/root/.pocket`
+- 复制 **~/.swan/provider/chains.json** 到 `config-pokt.toml` 中 `pokt_path`指定路径，例如 `/root/.pocket`。
 ```
 mkdir -p /root/.pocket/config
 cp ~/.swan/provider/chains.json /root/.pocket/config/chains.json

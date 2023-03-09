@@ -166,11 +166,11 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 
 		runCmd := []string{""}
 		if psvc.dkNetworkType == "TESTNET" {
-			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_TESTNET='true'"}
+			env = []string{"POCKET_TESTNET='true'"}
 		} else if psvc.dkNetworkType == "MAINNET" {
-			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_MAINNET='true'"}
+			env = []string{"POCKET_MAINNET='true'"}
 		} else if psvc.dkNetworkType == "SIMULATE" {
-			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_SIMULATE='true'"}
+			env = []string{"POCKET_SIMULATE='true'"}
 		}
 		GetLog().Info("Create Pocket ", psvc.dkNetworkType, "")
 
