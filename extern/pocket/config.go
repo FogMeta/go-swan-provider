@@ -1,7 +1,6 @@
 package pocket
 
 import (
-	"encoding/json"
 	"github.com/BurntSushi/toml"
 	"os"
 	"path/filepath"
@@ -105,20 +104,23 @@ func ReadPocketChains() string {
 		GetLog().Error("Open chains.json error:", err)
 		return ""
 	}
+	defer chainsFile.Close()
 
-	decoder := json.NewDecoder(chainsFile)
-	var data interface{}
-	err = decoder.Decode(&data)
+	fileInfo, err := os.Stat(filepath.Join(configPath, "provider/chains.json"))
 	if err != nil {
-		GetLog().Error("Decoder chains.json error:", err)
+		GetLog().Error("Stat chains.json error:", err)
 		return ""
 	}
-	chains, ok := data.(string)
-	if !ok {
-		GetLog().Error("Decoder chains.json error")
+	chainSize := fileInfo.Size()
+
+	content := make([]byte, chainSize)
+	count, err := chainsFile.Read(content)
+	if err != nil {
+		GetLog().Error("Read chains.json error:", err)
 		return ""
 	}
 
-	GetLog().Info("chains.json :", chains)
+	chains := string(content[:count])
+	//GetLog().Info("chains.json :\n", chains)
 	return chains
 }
