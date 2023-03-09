@@ -10,4 +10,4 @@ pokt_scan_interval=60                         # Pocket scan interval
 pokt_heartbeat_interval=180                   # 600 seconds or 10 minutes
 pokt_server_api_url="http://127.0.0.1:8088/"  # Url of pocket server api
 pokt_server_api_port=8088                     # Port of pocket server api
-pokt_network_type="TESTNET"                   # MAINNET TESTNET SIMULATE
+pokt_network_type="MAINNET"                   # MAINNET TESTNET
