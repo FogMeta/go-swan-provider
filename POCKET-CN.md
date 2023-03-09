@@ -37,7 +37,7 @@ sudo apt install docker
 git clone https://github.com/filswan/go-swan-provider.git
 cd go-swan-provider
 git checkout release-2.1.0
-make
+./build_install_pock.sh
 ```
 
 ### 配置provider
@@ -54,15 +54,8 @@ make
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`。
 - **pokt_network_type** pocket网络类型，可以是 MAINNET 和 TESTNET 其中之一。
 
-### 下载快照
-- 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。解压路径 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_data_path` 指定的路径保持一致。
-```
-mkdir -p /root/.pocket/data
-wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket/data
-```
-
 ### 配置`chains.json`
-- 根据自身需求，配置`config-pokt.toml` 中 `pokt_path` 指定的路径下的  `/root/.pocket/config/chains.json` ，例如：
+- 根据自身需求，配置 **~/.swan/provider/chains.json** ，例如：
 ```
 [
     {
@@ -84,10 +77,23 @@ wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.
 ]
 ```
 
-### 运行
-- 后台运行 `swan-provider`
+- 复制 **~/.swan/provider/chains.json** 到 `config-pokt.toml` 中 `pokt_path`指定路径，例如： `/root/.pocket`
 ```
-nohup swan-provider pocket start --passwd 123456 >> swan-provider.log 2>&1 & 
+mkdir -p /root/.pocket/config
+cp ~/.swan/provider/chains.json /root/.pocket/config/chains.json
+```
+
+### 下载快照
+- 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。解压目录 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_path` 指定的路径保持一致。
+```
+mkdir -p /root/.pocket/data
+wget -qO- https://snapshot.nodes.pokt.network/latest.tar.gz | tar -xz -C /root/.pocket/data
+```
+
+### 运行
+- 后台运行 `swan-provider`, 其中 `start` 命令参数 `passwd` 初始创建账号的 `Passphrase`
+```
+nohup ./swan-provider pocket start --passwd 123456 >> provider-pokt.log 2>&1 & 
 ```
 
 ### 充值
