@@ -1,4 +1,4 @@
-# Swan Provider
+# RPC Provider Guideline
 [![Discord](https://img.shields.io/discord/770382203782692945?label=Discord&logo=Discord)](https://discord.gg/MSXGzVsSYf)
 [![Twitter Follow](https://img.shields.io/twitter/follow/0xfilswan)](https://twitter.com/0xfilswan)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg)](https://github.com/RichardLitt/standard-readme)
@@ -11,7 +11,6 @@
 - [特性](#特性)
 - [前提条件](#前提条件)
 - [安装部署](#安装部署)
-- [配置](#配置)
 - [许可证](#许可证)
 
 ## 特性
@@ -31,8 +30,7 @@ sudo apt install docker
 参考: [官方安装文档](https://docs.docker.com/engine/install/)
 
 ## 安装部署
-### 安装选择: 从源代码构建
-####  构建指引
+### 从源代码构建安装: 
 ```shell
 git clone https://github.com/filswan/go-swan-provider.git
 cd go-swan-provider
@@ -40,7 +38,7 @@ git checkout release-2.1.0
 ./build_install_pock.sh
 ```
 
-### 配置provider
+### 配置 `config-pokt.toml`
 #### 编辑配置文件 **~/.swan/provider/config-pokt.toml** :
 - **pokt_log_level:** 默认`INFO`,可选 DEBUG INFO WARN ERROR FATAL
 - **pokt_api_url:** 默认 `8081`，pocket API 端口。
@@ -54,7 +52,7 @@ git checkout release-2.1.0
 - **pokt_server_api_port** provider pocket 服务Port，例如 `8088`。
 - **pokt_network_type** pocket网络类型，可以是 MAINNET 和 TESTNET 其中之一。
 
-### 配置`chains.json`
+### 配置 `chains.json`
 - 根据自身需求，配置 **~/.swan/provider/chains.json** ，例如：
 ```
 [
@@ -119,8 +117,11 @@ pocket accounts get-validator
 # 进入容器
 docker exec -it  [CONTAINER_ID] /bin/sh
 
-# 执行抵押命令
+# custodial抵押
 pocket nodes stake custodial <operatorAddress> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
+
+# 或者 non-custodial 抵押
+pocket nodes stake non-custodial <operatorPublicKey> <outputAddress> <amount> <RelayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
 ```
 
 ## 帮助
