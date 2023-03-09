@@ -21,6 +21,10 @@
 swan-provider pocket start --passwd "123456"
 ```
 
+参数：
+
+- **passwd：** 设置初始账户的 `Passphrase`。
+
 
 ## 查看版本
 
@@ -59,6 +63,10 @@ Validator Address       : ee60841d9afb70ba893c02965537bc0eec4ef1e4
 ```shell
 swan-provider pocket balance --addr ee60841d9afb70ba893c02965537bc0eec4ef1e4
 ```
+
+参数：
+
+- **addr：** 查询账户地址。
 
 输出:
 
