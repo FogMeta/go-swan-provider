@@ -77,13 +77,6 @@ git checkout release-2.1.0
 ]
 ```
 
-- 复制 **~/.swan/provider/chains.json** 到 `config-pokt.toml` 中 `pokt_path`指定路径，例如 `/root/.pocket`。
-```
-mkdir -p /root/.pocket/config
-cp ~/.swan/provider/chains.json /root/.pocket/config/chains.json
-chmod -R 777 /root/.pocket
-```
-
 ### 下载快照
 - 从最新快照下载将极大地缩短主网同步区块链所需的时间。使用wget进行下载，并在下载后解压缩存档。解压目录 `/root/.pocket` 需要与 `config-pokt.toml` 中 `pokt_path` 指定的路径保持一致。
 ```
@@ -121,7 +114,7 @@ pocket accounts get-validator
 # 进入容器
 docker exec -it  [CONTAINER_ID] /bin/sh
 
-# custodial抵押
+# custodial 抵押
 pocket nodes stake custodial <operatorAddress> <amount> <relayChainIDs> <serviceURI> <networkID> <fee> <isBefore8.0>
 
 # non-custodial 抵押
