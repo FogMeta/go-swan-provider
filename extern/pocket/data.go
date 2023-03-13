@@ -145,6 +145,7 @@ type StatusResponse struct {
 type StatusData struct {
 	Version     string    `json:"version"`
 	Height      uint64    `json:"height"`
+	Synced      bool      `json:"synced"`
 	Address     string    `json:"address"`
 	PublicKey   string    `json:"publicKey"`
 	Balance     uint64    `json:"balance"`

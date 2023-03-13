@@ -249,6 +249,10 @@ func (psvc *PoktService) SendPoktHeartbeatRequest(swanClient *swan.SwanClient) {
 		value = color.New(color.FgYellow).Sprintf("%d", res.Data.Height)
 		fmt.Printf("%s\t\t: %s\n", title, value)
 
+		title = color.New(color.FgGreen).Sprintf("%s", "Synced")
+		value = color.New(color.FgRed).Sprintf("%t", res.Data.Synced)
+		fmt.Printf("%s\t\t: %s\n", title, value)
+
 		title = color.New(color.FgGreen).Sprintf("%s", "Address")
 		value = color.New(color.FgYellow).Sprintf("%s", res.Data.Address)
 		fmt.Printf("%s\t\t: %s\n", title, value)
@@ -331,6 +335,8 @@ func HttpGetPoktStatus(c *gin.Context) {
 	} else {
 		data.Height = heightData.Height
 	}
+
+	data.Synced, _ = PoktApiGetSync()
 
 	//address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
 	address, err := poktSvr.GetCli().PoktCtnExecInitAddress()
