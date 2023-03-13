@@ -99,6 +99,7 @@ curl --url http://127.0.0.1:8088/poktsrv/status
   "data": {
     "version": "RC-0.9.2",
     "height": 99167,
+    "Synced": true,
     "address": "ee60841d9afb70ba893c02965537bc0eec4ef1e4",
     "publicKey": "7b1739685dcdc10fcc02bc21dd822ef3458fcf543cc89487af9fe512b573e74d",
     "balance": 39999910000,

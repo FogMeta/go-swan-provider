@@ -89,6 +89,7 @@ swan-provider pocket status
 ```shell
 Version         : RC-0.9.2
 Height          : 99131
+Synced          : true
 Address         : ee60841d9afb70ba893c02965537bc0eec4ef1e4
 PublicKey       : 7b1739685dcdc10fcc02bc21dd822ef3458fcf543cc89487af9fe512b573e74d
 Balance         : 39999970000
