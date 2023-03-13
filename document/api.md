@@ -61,6 +61,12 @@ curl --request POST --url http://127.0.0.1:8088/poktsrv/balance --header 'Conten
 --data "{\"height\": 0,\"address\":\"ee60841d9afb70ba893c02965537bc0eec4ef1e4\"}"
 ```
 
+参数：
+
+- **height：** 要查询的区块的指定高度。默认为0，这将查询当前节点已知的最新块。
+- **address：** 目标地址。
+
+
 输出:
 
 ```shell
@@ -114,6 +120,11 @@ curl --url http://127.0.0.1:8088/poktsrv/status
 curl --request POST --url http://127.0.0.1:8088/poktsrv/set-validator --header 'Content-Type: application/json' \
 --data "{\"address\":\"ee60841d9afb70ba893c02965537bc0eec4ef1e4\",\"passwd\": \"123456\"}"
 ```
+
+参数：
+
+- **address：** 目标地址。
+- **passwd：** address 对应的 Passphrase。
 
 输出:
 
