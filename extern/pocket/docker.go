@@ -11,6 +11,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -464,6 +465,11 @@ func (cli *DockerCli) PoktCtnExecSetValidator(address, passwd string) (string, e
 	return rsp, nil
 }
 
+type LogsHashData struct {
+	Logs string `json:"logs"`
+	Hash string `json:"hash"`
+}
+
 func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
 	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
@@ -472,7 +478,16 @@ func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, servi
 	}
 	GetLog().Debug("Exec Pocket Custodial Result:", rsp)
 
-	return rsp, nil
+	re := regexp.MustCompile(`\"logs\": (.*?),(?:\r\n\s+)?\"txhash\": \"(\S+)\"`)
+	match := re.FindStringSubmatch(rsp)
+	logsHash := LogsHashData{Logs: match[1], Hash: match[2]}
+	result, err := json.MarshalIndent(logsHash, "", "  ")
+	if err != nil {
+		GetLog().Error("Match Custodial Result Error:", err)
+		return "", err
+	}
+
+	return string(result), nil
 }
 
 func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
@@ -481,5 +496,15 @@ func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayC
 		GetLog().Error("Exec Pocket NonCustodial Error:", err)
 		return "", err
 	}
-	return rsp, nil
+
+	re := regexp.MustCompile(`\"logs\": (.*?),(?:\r\n\s+)?\"txhash\": \"(\S+)\"`)
+	match := re.FindStringSubmatch(rsp)
+	logsHash := LogsHashData{Logs: match[1], Hash: match[2]}
+	result, err := json.MarshalIndent(logsHash, "", "  ")
+	if err != nil {
+		GetLog().Error("Match Non-Custodial Result Error:", err)
+		return "", err
+	}
+
+	return string(result), nil
 }
