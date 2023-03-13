@@ -195,7 +195,12 @@ func (psvc *PoktService) StartScan() {
 	if err != nil {
 		GetLog().Error(err)
 	}
-	GetLog().Info("Pokt Get Current Height=", height)
+
+	synced, err := PoktApiGetSync()
+	if err != nil {
+		GetLog().Error(err)
+	}
+	GetLog().Info("Pokt Get Current Height=", height, " and Synced=", synced)
 
 }
 
