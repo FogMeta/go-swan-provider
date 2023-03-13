@@ -257,8 +257,8 @@ func cmdPoktBalance(op []string) {
 
 func cmdPoktCustodial(op []string) {
 
-	fs := flag.NewFlagSet("Custodial", flag.ExitOnError)
-	operatorAddress := fs.String("operatorAddress", "", "")
+	fs := flag.NewFlagSet("custodial", flag.ExitOnError)
+	fromAddr := fs.String("fromAddr", "", "")
 	amount := fs.String("amount", "", "")
 	relayChainIDs := fs.String("relayChainIDs", "", "")
 	serviceURI := fs.String("serviceURI", "", "")
@@ -268,13 +268,13 @@ func cmdPoktCustodial(op []string) {
 	passwd := fs.String("passwd", "", "")
 
 	err := fs.Parse(op[1:])
-	if *operatorAddress == "" || *amount == "" || *relayChainIDs == "" || *serviceURI == "" || *networkID == "" || *fee == "" || *isBefore == "" || err != nil {
+	if *fromAddr == "" || *amount == "" || *relayChainIDs == "" || *serviceURI == "" || *networkID == "" || *fee == "" || *isBefore == "" || err != nil {
 		printPoktUsage()
 		return
 	}
 
 	params := &CustodialParams{
-		Address:       *operatorAddress,
+		Address:       *fromAddr,
 		Amount:        *amount,
 		RelayChainIDs: *relayChainIDs,
 		ServiceURI:    *serviceURI,
@@ -306,7 +306,7 @@ func cmdPoktCustodial(op []string) {
 
 func cmdPoktNonCustodial(op []string) {
 
-	fs := flag.NewFlagSet("Custodial", flag.ExitOnError)
+	fs := flag.NewFlagSet("non-custodial", flag.ExitOnError)
 	operatorPublicKey := fs.String("operatorPublicKey", "", "")
 	outputAddress := fs.String("outputAddress", "", "")
 	amount := fs.String("amount", "", "")
