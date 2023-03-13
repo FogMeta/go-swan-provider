@@ -364,7 +364,7 @@ func HttpGetPoktStatus(c *gin.Context) {
 
 	signData, err := poktSvr.GetCli().PoktCtnExecSignInfo(address)
 	if err != nil || len(signData) == 0 {
-		GetLog().Error(err)
+		GetLog().Warn(err)
 	} else {
 		signInfo := signData[0]
 		data.JailedUntil = signInfo.JailedUntil
