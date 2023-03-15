@@ -9,8 +9,6 @@ type Response struct {
 	Data    string `json:"data"`
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 type VersionResponse struct {
 	Status  string      `json:"status"`
 	Code    string      `json:"code"`
@@ -21,8 +19,6 @@ type VersionResponse struct {
 type VersionData struct {
 	Version string `json:"version"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type HeightPoktParams struct {
 }
@@ -37,8 +33,6 @@ type HeightResponse struct {
 	Message string     `json:"message,omitempty"`
 	Data    HeightData `json:"data"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type BalancePoktParams struct {
 	Height  uint64 `json:"height"`
@@ -61,8 +55,6 @@ type BalanceHttpResponse struct {
 	Message string         `json:"message,omitempty"`
 	Data    BalanceCmdData `json:"data"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type PoktSignInfoParams struct {
 	Height  int64  `json:"height"`
@@ -87,8 +79,6 @@ type PoktSigningInfoResponse struct {
 	TotalPages int            `json:"total_pages"`
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 type PoktNodeParams struct {
 	Height  uint64 `json:"height"`
 	Address string `json:"address"`
@@ -112,8 +102,6 @@ type PoktNodeResponse struct {
 	TotalPages int         `json:"total_pages"`
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 type PoktSupplyParams struct {
 	Height uint64 `json:"height"`
 }
@@ -126,8 +114,6 @@ type PoktSupplyResponse struct {
 	TotalUnStaked string `json:"total_unstaked"`
 	Total         string `json:"total"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type SignInfo struct {
 	Address     string `json:"address"`
@@ -145,8 +131,6 @@ type SignInfoResponse struct {
 	TotalPages int         `json:"total_pages"`
 }
 
-///////////////////////////////////////////////////////////////////////////////
-
 type StatusParams struct {
 	Address string `json:"address"`
 }
@@ -162,14 +146,14 @@ type StatusData struct {
 	Version     string    `json:"version"`
 	Height      uint64    `json:"height"`
 	Address     string    `json:"address"`
+	PublicKey   string    `json:"publicKey"`
 	Balance     uint64    `json:"balance"`
+	Staking     string    `json:"staking"`
 	Award       string    `json:"award"`
 	Jailed      bool      `json:"jailed"`
 	JailedBlock uint64    `json:"jailedBlock"`
 	JailedUntil time.Time `json:"jailedUntil"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type ThresholdResponse struct {
 	Status  string        `json:"status"`
@@ -189,7 +173,21 @@ type ThresholdParams struct {
 	Threshold uint64 `json:"threshold"`
 }
 
-///////////////////////////////////////////////////////////////////////////////
+type ValidatorResponse struct {
+	Status  string        `json:"status"`
+	Code    string        `json:"code"`
+	Message string        `json:"message,omitempty"`
+	Data    ValidatorData `json:"data"`
+}
+
+type ValidatorData struct {
+	Result string `json:"result"`
+}
+
+type ValidatorParams struct {
+	Address string `json:"address"`
+	Passwd  string `json:"passwd"`
+}
 
 type CustodialResponse struct {
 	Status  string        `json:"status"`
@@ -210,9 +208,8 @@ type CustodialParams struct {
 	NetworkID     string `json:"network_id"`
 	Fee           string `json:"fee"`
 	IsBefore      string `json:"is_before"`
+	Passwd        string `json:"passwd"`
 }
-
-///////////////////////////////////////////////////////////////////////////////
 
 type NonCustodialResponse struct {
 	Status  string           `json:"status"`
@@ -234,6 +231,5 @@ type NonCustodialParams struct {
 	NetworkID     string `json:"network_id"`
 	Fee           string `json:"fee"`
 	IsBefore      string `json:"is_before"`
+	Passwd        string `json:"passwd"`
 }
-
-///////////////////////////////////////////////////////////////////////////////

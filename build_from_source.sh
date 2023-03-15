@@ -26,6 +26,16 @@ else
     echo "${CONF_FILE_PATH} created"
 fi
 
+CONF_POKT_PATH=${CONF_FILE_DIR}/config-pokt.toml
+echo CONF_POKT_PATH
+if [ -f "${CONF_POKT_PATH}" ]; then
+    echo "${CONF_POKT_PATH} exists"
+else
+    cp ./config/config-pokt.toml.example CONF_POKT_PATH
+    echo "${CONF_POKT_PATH} created"
+fi
+
+
 sed -i 's/%%USER%%/'${USER}'/g' ./aria2c.service   # Set User & Group to value of $USER
 
 if [ ! -d "/etc/aria2" ]; then

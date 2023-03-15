@@ -16,6 +16,10 @@ import (
 	"time"
 )
 
+const (
+	POCKET_CONFIG_PATH = "/home/app"
+)
+
 var myCli *DockerCli
 
 type DockerCli struct {
@@ -123,6 +127,7 @@ func (cli *DockerCli) PoktCtnCreate() bool {
 	}
 	defer out.Close()
 	io.Copy(os.Stdout, out)
+	//logs.GetLog().Warn("### Image Pull Skip ###")
 
 	body, err := cli.Client.ContainerCreate(
 		cli.Ctx,
@@ -149,6 +154,7 @@ func (cli *DockerCli) PoktCtnPullAndCreate(cmd, env []string, autoRemove bool) b
 	}
 	defer out.Close()
 	io.Copy(os.Stdout, out)
+	//logs.GetLog().Warn("### Image Pull Skip ###")
 
 	logs.GetLog().Debug("Container Create Para DataPath=", cli.DataPath, " autoRemove=", autoRemove)
 	body, err := cli.Client.ContainerCreate(
@@ -304,10 +310,16 @@ func (cli *DockerCli) PoktCtnExecVersion() (*models.VersionData, error) {
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "version"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Version Error:", err)
-		return nil, err
+		return &models.VersionData{}, err
 	}
 
+	logs.GetLog().Info("Exec Pocket Version:", strRes)
 	index := strings.Index(strRes, ":")
+	if index < 0 {
+		logs.GetLog().Error("Exec Pocket Version Error: No version info return")
+		return &models.VersionData{}, errors.New("No Version Info ")
+	}
+
 	jOut := &models.VersionData{
 		Version: strings.TrimSuffix(strRes[index+2:], "\n"),
 	}
@@ -316,7 +328,7 @@ func (cli *DockerCli) PoktCtnExecVersion() (*models.VersionData, error) {
 	return jOut, nil
 }
 
-func (cli *DockerCli) PoktCtnExecNodeAddress() (string, error) {
+func (cli *DockerCli) PoktCtnExecInitAddress() (string, error) {
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "accounts", "list"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Node Account Error:", err)
@@ -337,6 +349,26 @@ func (cli *DockerCli) PoktCtnExecNodeAddress() (string, error) {
 	return jOut, nil
 }
 
+func (cli *DockerCli) PoktCtnExecValidatorAddress() (string, error) {
+	strRes, err := cli.PoktCtnExec([]string{"pocket", "accounts", "get-validator"})
+	if err != nil {
+		logs.GetLog().Error("Exec Pocket Node Account Error:", err)
+		return "", err
+	}
+
+	index := strings.Index(strRes, "Validator Address:") + len("Validator Address:")
+	jOut := strRes[index : index+40]
+	logs.GetLog().Debug("pocket query validator address result:", jOut)
+
+	_, finded := os.LookupEnv("TEST_POCKET_MODE")
+	if finded {
+		//ONLY FOR TEST
+		jOut = "ffad090789253ad0439c56b7b9c301f90424d5b7"
+	}
+
+	return jOut, nil
+}
+
 func (cli *DockerCli) PoktCtnExecSetAccount(address string) (string, error) {
 	rsp, err := cli.PoktCtnExec([]string{"pocket", "accounts", "set-validator", address})
 	if err != nil {
@@ -347,83 +379,94 @@ func (cli *DockerCli) PoktCtnExecSetAccount(address string) (string, error) {
 }
 
 func (cli *DockerCli) PoktCtnExecHeight() (*models.HeightData, error) {
+	jOut := &models.HeightData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "height"})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Height Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.HeightData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query height result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil
 }
 
 func (cli *DockerCli) PoktCtnExecBalance(address string) (*models.BalanceData, error) {
+	jOut := &models.BalanceData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "balance", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Balance Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.BalanceData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query balance result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil
 }
 
 func (cli *DockerCli) PoktCtnExecSignInfo(address string) ([]*models.SignInfo, error) {
+	jOut := &models.SignInfoResponse{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "signing-info", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Sign Info Error:", err)
-		return nil, err
+		return jOut.Result, err
 	}
 
-	jOut := &models.SignInfoResponse{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query signing-info result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut.Result, err
 	}
 
 	return jOut.Result, nil
 }
 
 func (cli *DockerCli) PoktCtnExecNode(address string) (*models.NodeData, error) {
+	jOut := &models.NodeData{}
 	strRes, err := cli.PoktCtnExec([]string{"pocket", "query", "node", address})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Node Error:", err)
-		return nil, err
+		return jOut, err
 	}
 
-	jOut := &models.NodeData{}
 	index := strings.Index(strRes, "{")
 	logs.GetLog().Debug("pocket query node result for json:", strRes[index:])
 	err = json.Unmarshal([]byte(strRes[index:]), jOut)
 	if err != nil {
 		logs.GetLogger().Error(err)
-		return nil, err
+		return jOut, err
 	}
 
 	return jOut, nil
 }
 
-func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore})
+func (cli *DockerCli) PoktCtnExecSetValidator(address, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/set-validator.sh", address, passwd})
+	if err != nil {
+		logs.GetLog().Error("Exec Pocket Set Validator Error:", err)
+		return "", err
+	}
+	logs.GetLog().Debug("Exec Pocket Set Validator Result:", rsp)
+
+	return rsp, nil
+}
+
+func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/custodial.sh", address, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket Custodial Error:", err)
 		return "", err
@@ -433,8 +476,8 @@ func (cli *DockerCli) PoktCtnExecCustodial(address, amount, relayChainIDs, servi
 	return rsp, nil
 }
 
-func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore string) (string, error) {
-	rsp, err := cli.PoktCtnExec([]string{"expect", "~/.pocket/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore})
+func (cli *DockerCli) PoktCtnExecNonCustodial(pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd string) (string, error) {
+	rsp, err := cli.PoktCtnExec([]string{"expect", POCKET_CONFIG_PATH + "/noncustodial.sh", pubKey, outputAddr, amount, relayChainIDs, serviceURI, networkID, fee, isBefore, passwd})
 	if err != nil {
 		logs.GetLog().Error("Exec Pocket NonCustodial Error:", err)
 		return "", err

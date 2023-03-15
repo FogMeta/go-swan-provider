@@ -11,6 +11,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"math/big"
 	"net/http"
+	"os"
 	"strconv"
 	"swan-provider/common"
 	"swan-provider/config"
@@ -45,6 +46,8 @@ type PoktService struct {
 	dkName     string
 	dkConfPath string
 
+	dkNetworkType string
+
 	dkCli *mydc.DockerCli
 
 	PoktAddress string
@@ -68,8 +71,18 @@ func GetMyPoktService() *PoktService {
 			dkImage:              confPokt.PoktDockerImage,
 			dkName:               confPokt.PoktDockerName,
 			dkConfPath:           confPokt.PoktConfigPath,
+			dkNetworkType:        confPokt.PoktNetworkType,
 			CurStatus:            Status{},
 		}
+		// 新目录名称和权限属性
+		perm := os.FileMode(0777)
+		err := os.MkdirAll(myPoktSvr.dkConfPath, perm)
+		if err != nil {
+			logs.GetLog().Error("Create ", myPoktSvr.dkConfPath, "error: ", err)
+			panic("Create Pocket Data Path Error")
+		}
+		os.Chmod(myPoktSvr.dkConfPath, perm)
+
 		myPoktSvr.dkCli = docker.GetMyCli(myPoktSvr.dkImage, myPoktSvr.dkName, myPoktSvr.dkConfPath)
 
 		logs.GetLog().Debugf("New myPoktSvr :%+v ", *myPoktSvr)
@@ -91,6 +104,7 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 	cli := psvc.dkCli
 	if !cli.PoktCtnExist() {
 
+		logs.GetLog().Debug("Init Pocket Container ... ")
 		fs := flag.NewFlagSet("Start", flag.ExitOnError)
 		passwd := fs.String("passwd", "", "password for create account")
 		err := fs.Parse(op[1:])
@@ -101,10 +115,11 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 		}
 
 		pass := *passwd
-		logs.GetLog().Debug("POCKET_CORE_PASSPHRASE=", pass)
-		env := []string{"POCKET_CORE_KEY=", "POCKET_CORE_PASSPHRASE=" + pass}
+		logs.GetLog().Debug("POCKET_PASSPHRASE=", pass)
+		env := []string{"POCKET_PASSPHRASE=" + pass}
 
-		accCmd := []string{"pocket", "accounts", "create"}
+		//accCmd := []string{"pocket", "accounts", "create"}
+		accCmd := []string{""}
 		cli.PoktCtnPullAndCreate(accCmd, env, true)
 		cli.PoktCtnStart()
 
@@ -117,17 +132,25 @@ func (psvc *PoktService) StartPoktContainer(op []string) {
 			}
 			break
 		}
+		logs.GetLog().Debug("Init Creating Account Over")
 
-		runCmd := []string{
-			"pocket",
-			"start",
-			"--seeds=03b74fa3c68356bb40d58ecc10129479b159a145@seed1.mainnet.pokt.network:20656,64c91701ea98440bc3674fdb9a99311461cdfd6f@seed2.mainnet.pokt.network:21656,0057ee693f3ce332c4ffcb499ede024c586ae37b@seed3.mainnet.pokt.network:22856,9fd99b89947c6af57cd0269ad01ecb99960177cd@seed4.mainnet.pokt.network:23856,f2a4d0ec9d50ea61db18452d191687c899c3ca42@seed5.mainnet.pokt.network:24856,f2a9705924e8d0e11fed60484da2c3d22f7daba8@seed6.mainnet.pokt.network:25856,582177fd65dd03806eeaa2e21c9049e653672c7e@seed7.mainnet.pokt.network:26856,2ea0b13ab823986cfb44292add51ce8677b899ad@seed8.mainnet.pokt.network:27856,a5f4a4cd88db9fd5def1574a0bffef3c6f354a76@seed9.mainnet.pokt.network:28856,d4039bd71d48def9f9f61f670c098b8956e52a08@seed10.mainnet.pokt.network:29856,5c133f08ed297bb9e21e3e42d5f26e0f7d2b2832@poktseed100.chainflow.io:26656,361b1936d3fbe516628ebd6a503920fc4fc0f6a7@seed.pokt.rivet.cloud:26656",
-			"--mainnet"}
+		runCmd := []string{""}
+		if psvc.dkNetworkType == "TESTNET" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_TESTNET='true'"}
+		} else if psvc.dkNetworkType == "MAINNET" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_MAINNET='true'"}
+		} else if psvc.dkNetworkType == "SIMULATE" {
+			env = []string{"POCKET_PASSPHRASE=" + pass, "POCKET_SIMULATE='true'"}
+		}
+		logs.GetLog().Info("Create Pocket ", psvc.dkNetworkType, "")
+
 		cli.PoktCtnCreateRun(runCmd, env, false)
 
 	}
 
-	cli.PoktCtnStart()
+	if !cli.PoktCtnStart() {
+		logs.GetLog().Error("Pocket Start FALSE")
+	}
 }
 
 func (psvc *PoktService) StartScan() {
@@ -189,8 +212,16 @@ func (psvc *PoktService) SendPoktHeartbeatRequest(swanClient *swan.SwanClient) {
 		value = color.New(color.FgYellow).Sprintf("%s", res.Data.Address)
 		fmt.Printf("%s\t\t: %s\n", title, value)
 
+		title = color.New(color.FgGreen).Sprintf("%s", "PublicKey")
+		value = color.New(color.FgYellow).Sprintf("%s", res.Data.PublicKey)
+		fmt.Printf("%s\t: %s\n", title, value)
+
 		title = color.New(color.FgGreen).Sprintf("%s", "Balance")
 		value = color.New(color.FgYellow).Sprintf("%d", res.Data.Balance)
+		fmt.Printf("%s\t\t: %s\n", title, value)
+
+		title = color.New(color.FgGreen).Sprintf("%s", "Staking")
+		value = color.New(color.FgYellow).Sprintf("%s", res.Data.Staking)
 		fmt.Printf("%s\t\t: %s\n", title, value)
 
 		title = color.New(color.FgGreen).Sprintf("%s", "Jailed")
@@ -231,9 +262,9 @@ func HttpGetPoktCurHeight(c *gin.Context) {
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(cmdOut))
 }
 
-func HttpGetPoktNodeAddr(c *gin.Context) {
+func HttpGetPoktValidatorAddr(c *gin.Context) {
 	poktSvr := GetMyPoktService()
-	cmdOut, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	cmdOut, err := poktSvr.GetCli().PoktCtnExecValidatorAddress()
 	if err != nil {
 		logs.GetLog().Error(err)
 		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
@@ -244,58 +275,53 @@ func HttpGetPoktNodeAddr(c *gin.Context) {
 
 func HttpGetPoktStatus(c *gin.Context) {
 	poktSvr := GetMyPoktService()
+	data := &models.StatusData{}
 
 	versionData, err := poktSvr.GetCli().PoktCtnExecVersion()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Version = versionData.Version
 	}
 
 	heightData, err := poktSvr.GetCli().PoktCtnExecHeight()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Height = heightData.Height
 	}
 
-	address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	//address, err := poktSvr.GetCli().PoktCtnExecNodeAddress()
+	address, err := poktSvr.GetCli().PoktCtnExecInitAddress()
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Address = address
 	}
 
 	balanceData, err := poktSvr.GetCli().PoktCtnExecBalance(address)
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Balance = balanceData.Balance
 	}
 
 	nodeData, err := poktSvr.GetCli().PoktCtnExecNode(address)
 	if err != nil {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
+	} else {
+		data.Staking = nodeData.StakedTokens
+		data.PublicKey = nodeData.PublicKey
+		data.Jailed = nodeData.Jailed
 	}
 
 	signData, err := poktSvr.GetCli().PoktCtnExecSignInfo(address)
 	if err != nil || len(signData) == 0 {
 		logs.GetLog().Error(err)
-		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
-		return
-	}
-	signInfo := signData[0]
-
-	data := &models.StatusData{
-		Version:     versionData.Version,
-		Height:      heightData.Height,
-		Address:     address,
-		Balance:     balanceData.Balance,
-		Jailed:      nodeData.Jailed,
-		JailedBlock: signInfo.JailedBlocksCounter,
-		JailedUntil: signInfo.JailedUntil,
+	} else {
+		signInfo := signData[0]
+		data.JailedUntil = signInfo.JailedUntil
+		data.JailedBlock = signInfo.JailedBlocksCounter
 	}
 
 	c.JSON(http.StatusOK, common.CreateSuccessResponse(data))
@@ -346,7 +372,35 @@ func HttpGetPoktThreshold(c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-func HttpGetPoktCustodial(c *gin.Context) {
+func HttpSetPoktValidator(c *gin.Context) {
+	var params models.ValidatorParams
+	err := c.BindJSON(&params)
+	if err != nil {
+		logs.GetLog().Error(err)
+		c.JSON(http.StatusOK, common.CreateErrorResponse("-1", err.Error()))
+		return
+	}
+
+	poktSvr := GetMyPoktService()
+	result, err := poktSvr.GetCli().PoktCtnExecSetValidator(
+		params.Address,
+		params.Passwd,
+	)
+	if err != nil {
+		logs.GetLog().Error(err)
+		c.JSON(http.StatusInternalServerError, common.CreateErrorResponse("-1", err.Error()))
+		return
+	}
+
+	data := &models.ValidatorData{
+		Result: result,
+	}
+	c.JSON(http.StatusOK, common.CreateSuccessResponse(data))
+}
+
+///////////////////////////////////////////////////////////////////////////////
+
+func HttpSetPoktCustodial(c *gin.Context) {
 	var params models.CustodialParams
 	err := c.BindJSON(&params)
 	if err != nil {
@@ -364,6 +418,7 @@ func HttpGetPoktCustodial(c *gin.Context) {
 		params.NetworkID,
 		params.Fee,
 		params.IsBefore,
+		params.Passwd,
 	)
 	if err != nil {
 		logs.GetLog().Error(err)
@@ -379,7 +434,7 @@ func HttpGetPoktCustodial(c *gin.Context) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-func HttpGetPoktNonCustodial(c *gin.Context) {
+func HttpSetPoktNonCustodial(c *gin.Context) {
 	var params models.NonCustodialParams
 	err := c.BindJSON(&params)
 	if err != nil {
@@ -398,6 +453,7 @@ func HttpGetPoktNonCustodial(c *gin.Context) {
 		params.NetworkID,
 		params.Fee,
 		params.IsBefore,
+		params.Passwd,
 	)
 	if err != nil {
 		logs.GetLog().Error(err)

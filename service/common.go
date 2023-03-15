@@ -55,7 +55,7 @@ const ONCHAIN_DEAL_STATUS_AWAITING = "StorageDealAwaitingPreCommit"
 const LOTUS_IMPORT_NUMNBER = 20 //Max number of deals to be imported at a time
 const LOTUS_SCAN_NUMBER = 100   //Max number of deals to be scanned at a time
 
-const API_POCKET_V1 = "/api/pocket/v1"
+const API_POCKET_V1 = "/poktsrv"
 
 var aria2Client *client.Aria2Client
 var swanClient *swan.SwanClient
@@ -78,7 +78,7 @@ func ParsePoktCmd(cmd []string) {
 		poktHttpServer()
 	case "version":
 		cmdPoktVersion()
-	case "nodeaddr":
+	case "validator":
 		cmdPoktNodeAddr()
 	case "balance":
 		cmdPoktBalance(cmd[1:])
@@ -96,6 +96,8 @@ func ParsePoktCmd(cmd []string) {
 
 func poktStartScan() {
 	logs.GetLog().Info("Start...")
+	time.Sleep(time.Second * poktService.PoktScanInterval)
+
 	for {
 		poktService.StartScan()
 		logs.GetLog().Info("Sleeping...")
@@ -105,6 +107,7 @@ func poktStartScan() {
 }
 
 func sendHeartbeat2Swan() {
+	time.Sleep(time.Second * poktService.ApiHeartbeatInterval)
 	for {
 		logs.GetLog().Info("Start...")
 		poktService.SendPoktHeartbeatRequest(swanClient)
@@ -119,7 +122,7 @@ func printPoktUsage() {
 	fmt.Println("USAGE:")
 	fmt.Println("    swan-provider pocket start")
 	fmt.Println("    swan-provider pocket version")
-	fmt.Println("    swan-provider pocket nodeaddr")
+	fmt.Println("    swan-provider pocket validator")
 	fmt.Println("    swan-provider pocket balance --addr=0123456789012345678901234567890123456789")
 	fmt.Println("    swan-provider pocket status")
 	//fmt.Println("    swan-provider pocket custodial")
@@ -166,6 +169,9 @@ func cmdPoktStart(op []string) {
 	if err != nil {
 		logs.GetLog().Error("Get Pocket Accounts error:", err)
 	}
+	if !strings.Contains(acc, "(0) ") {
+		panic("Get Init Pocket Accounts Error.")
+	}
 	poktService.PoktAddress = strings.Split(acc, "(0) ")[1][0:40]
 	poktService.CurStatus.Address = poktService.PoktAddress
 	logs.GetLog().Info("Pocket Accounts is:", poktService.PoktAddress)
@@ -194,13 +200,14 @@ func poktHttpServer() {
 	{
 		apiv1.GET("/version", HttpGetPoktVersion)
 		apiv1.GET("/height", HttpGetPoktCurHeight)
-		apiv1.GET("/nodeaddr", HttpGetPoktNodeAddr)
+		apiv1.GET("/validator", HttpGetPoktValidatorAddr)
 		apiv1.GET("/status", HttpGetPoktStatus)
 
 		apiv1.POST("/balance", HttpGetPoktBalance)
 		apiv1.POST("/threshold", HttpGetPoktThreshold)
-		apiv1.POST("/custodial", HttpGetPoktCustodial)
-		apiv1.POST("/noncustodial", HttpGetPoktNonCustodial)
+		apiv1.POST("/set-validator", HttpSetPoktValidator)
+		apiv1.POST("/custodial", HttpSetPoktCustodial)
+		apiv1.POST("/noncustodial", HttpSetPoktNonCustodial)
 	}
 
 	port := config.GetPoktConfig().Pokt.PoktServerApiPort
@@ -239,7 +246,7 @@ func cmdPoktNodeAddr() {
 	confPokt := config.GetPoktConfig().Pokt
 	selfUrl := utils.UrlJoin(confPokt.PoktServerApiUrl, API_POCKET_V1)
 
-	apiUrl := utils.UrlJoin(selfUrl, "nodeaddr")
+	apiUrl := utils.UrlJoin(selfUrl, "validator")
 	response, err := web.HttpGetNoToken(apiUrl, params)
 	if err != nil {
 		fmt.Printf("Get Pocket Node Address err: %s \n", err)
@@ -253,7 +260,7 @@ func cmdPoktNodeAddr() {
 		return
 	}
 
-	title := color.New(color.FgGreen).Sprintf("%s", "Node Address")
+	title := color.New(color.FgGreen).Sprintf("%s", "Validator Address")
 	value := color.New(color.FgYellow).Sprintf("%s", res.Data)
 	fmt.Printf("%s\t: %s\n", title, value)
 
@@ -306,6 +313,7 @@ func cmdPoktCustodial(op []string) {
 	networkID := fs.String("networkID", "", "")
 	fee := fs.String("fee", "", "")
 	isBefore := fs.String("isBefore", "", "")
+	passwd := fs.String("passwd", "", "")
 
 	err := fs.Parse(op[1:])
 	if *operatorAddress == "" || *amount == "" || *relayChainIDs == "" || *serviceURI == "" || *networkID == "" || *fee == "" || *isBefore == "" || err != nil {
@@ -313,7 +321,17 @@ func cmdPoktCustodial(op []string) {
 		return
 	}
 
-	params := ""
+	params := &models.CustodialParams{
+		Address:       *operatorAddress,
+		Amount:        *amount,
+		RelayChainIDs: *relayChainIDs,
+		ServiceURI:    *serviceURI,
+		NetworkID:     *networkID,
+		Fee:           *fee,
+		IsBefore:      *isBefore,
+		Passwd:        *passwd,
+	}
+
 	confPokt := config.GetPoktConfig().Pokt
 	selfUrl := utils.UrlJoin(confPokt.PoktServerApiUrl, API_POCKET_V1)
 
@@ -324,14 +342,14 @@ func cmdPoktCustodial(op []string) {
 		return
 	}
 
-	res := &models.StatusResponse{}
+	res := &models.CustodialResponse{}
 	err = json.Unmarshal(response, res)
 	if err != nil {
 		fmt.Printf("Parse Response (%s) err: %s \n", response, err)
 		return
 	}
 
-	fmt.Printf("Pocket Sratus is: %+v \n", res.Data)
+	fmt.Printf("Pocket Custodial Result is: %+v \n", res.Data)
 }
 
 func cmdPoktNonCustodial(op []string) {
@@ -404,8 +422,16 @@ func cmdPoktStatus() {
 	value = color.New(color.FgYellow).Sprintf("%s", res.Data.Address)
 	fmt.Printf("%s\t\t: %s\n", title, value)
 
+	title = color.New(color.FgGreen).Sprintf("%s", "PublicKey")
+	value = color.New(color.FgYellow).Sprintf("%s", res.Data.PublicKey)
+	fmt.Printf("%s\t: %s\n", title, value)
+
 	title = color.New(color.FgGreen).Sprintf("%s", "Balance")
 	value = color.New(color.FgYellow).Sprintf("%d", res.Data.Balance)
+	fmt.Printf("%s\t\t: %s\n", title, value)
+
+	title = color.New(color.FgGreen).Sprintf("%s", "Staking")
+	value = color.New(color.FgYellow).Sprintf("%s", res.Data.Staking)
 	fmt.Printf("%s\t\t: %s\n", title, value)
 
 	title = color.New(color.FgGreen).Sprintf("%s", "Jailed")

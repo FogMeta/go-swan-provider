@@ -32,7 +32,8 @@ type pokt struct {
 	PoktAddress       string        `toml:"pokt_address"`
 	PoktDockerImage   string        `toml:"pokt_docker_image"`
 	PoktDockerName    string        `toml:"pokt_docker_name"`
-	PoktConfigPath    string        `toml:"pokt_config_path"`
+	PoktConfigPath    string        `toml:"pokt_path"`
+	PoktNetworkType   string        `toml:"pokt_network_type"`
 	PoktScanInterval  time.Duration `toml:"pokt_scan_interval"`
 	PoktServerApiUrl  string        `toml:"pokt_server_api_url"`
 	PoktServerApiPort int           `toml:"pokt_server_api_port"`
@@ -98,7 +99,6 @@ func requiredFieldsAreGiven(metaData toml.MetaData) bool {
 		{"release"},
 
 		{"lotus"},
-		{"pokt"},
 		{"aria2"},
 		{"main"},
 		{"bid"},
@@ -155,7 +155,8 @@ func requiredPoktAreGiven(metaData toml.MetaData) bool {
 		{"pokt", "pokt_access_token"},
 		{"pokt", "pokt_docker_image"},
 		{"pokt", "pokt_docker_name"},
-		{"pokt", "pokt_config_path"},
+		{"pokt", "pokt_path"},
+		{"pokt", "pokt_network_type"},
 		{"pokt", "pokt_scan_interval"},
 		{"pokt", "pokt_server_api_url"},
 		{"pokt", "pokt_server_api_port"},
